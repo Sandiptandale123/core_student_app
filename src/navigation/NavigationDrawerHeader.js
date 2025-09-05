@@ -167,7 +167,7 @@ export const NavigationRightHeader = props => {
           <Ionicons name="notifications" size={24} color="#00779B" />
         </TouchableOpacity>
       ) : props.homeTitle ? (
-        <Text style={styles.headerTitle}>CoreApp</Text>
+        <Text style={styles.headerTitle}>CoreStudentApp</Text>
       ) : props.workoutplan ? (
         <View
           style={{
