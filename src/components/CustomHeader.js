@@ -23,21 +23,21 @@ const CustomHeader = ({
       navigation.toggleDrawer();
     }
   };
-  const [facultyInfo, setFacultyInfo] = useState(null);
+  const [studentInfo, setStudentInfo] = useState(null);
   useEffect(() => {
     const getUserData = async () => {
       try {
-        const storedUser = await AsyncStorage.getItem('facultyInfo');
+        const storedUser = await AsyncStorage.getItem('studentInfo');
         if (storedUser) {
-          setFacultyInfo(JSON.parse(storedUser));
+          setStudentInfo(JSON.parse(storedUser));
         }
       } catch (error) {
-        console.log("Error loading facultyInfo:", error);
+        console.log("Error loading studentInfo:", error);
       }
     };
     getUserData();
   }, []);
-  //console.log("printheaderfacultyinfo", JSON.stringify(facultyInfo))
+  //console.log("headerprintheaderstudentInfo", JSON.stringify(studentInfo))
 
   return (
     <View style={styles.header}>
@@ -66,7 +66,7 @@ const CustomHeader = ({
         )}
         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
           {/* Username */}
-          <Text style={styles.username}>{facultyInfo?.userFullName}</Text>
+          {/* <Text style={styles.username}>{studentInfo?.firstName}</Text> */}
 
           {/* Profile Photo */}
           {/* <Image
@@ -79,7 +79,9 @@ const CustomHeader = ({
     /> */}
           <Image
             source={
-              require('../assets/profile_picture.png')
+              studentInfo?.photoPath && studentInfo?.photoPath !== ''
+                ? { uri: studentInfo?.photoPath }
+                : require('../assets/profile_picture.png')
             }
             style={styles.profileImage}
           />

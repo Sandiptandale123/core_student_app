@@ -1,9 +1,9 @@
 // src/services/facultyApi.js
 import Api from "../utils/Api";
 
-export const getFacultyLogin = async (params) => {
+export const getStudentLogin = async (params) => {
     try {
-        const response = await Api.getApi('SystemUser/GetUserLoginMobile', params);
+        const response = await Api.getApi('PortalStudentLogIn/GetPortalStudentLoginMobile', params);
         return response;
     } catch (error) {
         // Axios error response handle

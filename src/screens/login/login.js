@@ -19,7 +19,7 @@ import colors from '../../utils/colors';
 import Api from '../../utils/Api';
 import { SET_USER } from '../../redux/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getFacultyLogin } from '../../utils/serviceApi';
+import { getStudentLogin } from '../../utils/serviceApi';
 import { TextInput as PaperTextInput } from 'react-native-paper';
 const Login = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -27,7 +27,8 @@ const Login = ({ navigation }) => {
   const [showErorMsg, setErrorMsg] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [facultyData, setFacultyData] = useState({
+  const [studentData, setStudentData] = useState({
+    prn_no: '',
     username: '',
     password: ''
   });
@@ -35,31 +36,33 @@ const Login = ({ navigation }) => {
     setErrorMsg('');
   }, []);
 
-  const loginApi = async (facultyData) => {
+  const loginApi = async (studentData) => {
     setErrorMsg('');
     setLoader(true);
 
     const params = {
-      UserName: facultyData.username,
-      Password: facultyData.password,
+      PRNNO: studentData.prn_no,
+      UserName: studentData.username,
+      Password: studentData.password,
     };
 
     try {
-      const response = await getFacultyLogin(params);
+      const response = await getStudentLogin(params);
       //console.log("API Raw Response:", response);
-
+      console.log("printresponse",JSON.stringify(response))
       if (response?.status === 200) {
         // ✅ Success case
-        const facultyInfo = Array.isArray(response.data) ? response.data[0] : response.data;
+        const studentInfo = Array.isArray(response.data) ? response.data[0] : response.data;
 
-        if (!facultyInfo) {
-          throw new Error("Invalid API response: facultyInfo missing");
+        if (!studentInfo) {
+          throw new Error("Invalid API response: studentInfo missing");
         }
-        await AsyncStorage.setItem('facultyInfo', JSON.stringify(facultyInfo));
+        await AsyncStorage.setItem('studentInfo', JSON.stringify(studentInfo));
         setLoader(false);
         navigation.replace('Home');
       }
       else if (response?.status === 400) {
+       
         // ✅ Failure case (No Data Found)
         const msg = response?.data?.message || "Invalid Credentials";
         setErrorMsg(msg);
@@ -103,107 +106,130 @@ const Login = ({ navigation }) => {
       ) : (
         <SafeAreaView style={styles.container}>
           {/* Keyboard dismiss on tap outside */}
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-            <KeyboardAvoidingView
-              style={{ flex: 1 }}
-              behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-              keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
-            >
-              {/* Title */}
-              <Text style={styles.title}>Faculty Login</Text>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+              <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+                keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+              >
+                {/* Title */}
+                <Text style={styles.title}>Student Login</Text>
 
-              {/* Illustration */}
-              <View style={{ height: 510 }}>
-                <Image
-                  source={require('../../assets/faculty_image.png')}
-                  style={styles.image}
-                  resizeMode="contain"
-                />
-
-                <View style={{ padding: 5, marginTop: 15 }}>
-                  <PaperTextInput
-                    mode="outlined"
-                    label="Username"
-                    value={facultyData?.username}
-                    outlineColor={colors.themeColor}
-                    activeOutlineColor={colors.themeColor}
-                    style={styles.commonPaperInput}
-                    theme={{
-                      ...styles.inputTheme,
-                      fonts: {
-                        ...styles.inputTheme?.fonts,
-                        bodyLarge: { fontSize: 18 },
-                      },
-                    }}
-                    placeholder="Enter Username"
-                    autoCapitalize="none"
-                    left={<PaperTextInput.Icon icon="account" color={colors.themeColor} />}
-                    onChangeText={(value) =>
-                      setFacultyData({ ...facultyData, username: value })
-                    }
+                {/* Illustration */}
+                <View style={{ height: 510 }}>
+                  <Image
+                    source={require('../../assets/student_image.png')}
+                    style={styles.image}
+                    resizeMode="cover"
                   />
 
-                  <PaperTextInput
-                    mode="outlined"
-                    label="Password"
-                    value={facultyData?.password}
-                    outlineColor={colors.themeColor}
-                    activeOutlineColor={colors.themeColor}
-                    style={styles.commonPaperInput}
-                    theme={{
-                      ...styles.inputTheme,
-                      fonts: {
-                        ...styles.inputTheme?.fonts,
-                        bodyLarge: { fontSize: 18 },
-                      },
-                    }}
-                    placeholder="Enter Password"
-                    secureTextEntry={!showPassword}
-                    left={<PaperTextInput.Icon icon="lock" color={colors.themeColor} />}
-                    right={
-                      <PaperTextInput.Icon
-                        icon={showPassword ? "eye" : "eye-off"}
-                        onPress={() => setShowPassword((prev) => !prev)}
-                      />
-                    }
-                    onChangeText={(value) =>
-                      setFacultyData({ ...facultyData, password: value })
-                    }
-                  />
-                  <View style={styles.optionsRow}>
+                  <View style={{ padding: 5, marginTop: 15 }}>
+                    <PaperTextInput
+                      mode="outlined"
+                      label="PRN No"
+                      value={studentData?.prn_no}
+                      outlineColor={colors.themeColor}
+                      activeOutlineColor={colors.themeColor}
+                      style={styles.commonPaperInput}
+                      theme={{
+                        ...styles.inputTheme,
+                        fonts: {
+                          ...styles.inputTheme?.fonts,
+                          bodyLarge: { fontSize: 18 },
+                        },
+                      }}
+                      placeholder="Enter PRN No"
+                      autoCapitalize="none"
+                      keyboardType="number-pad"
+                      left={<PaperTextInput.Icon icon="card-account-details" color={colors.themeColor} />}
+                      onChangeText={(value) =>
+                        setStudentData({ ...studentData, prn_no: value })
+                      }
+                    />
+                    <PaperTextInput
+                      mode="outlined"
+                      label="Username"
+                      value={studentData?.username}
+                      outlineColor={colors.themeColor}
+                      activeOutlineColor={colors.themeColor}
+                      style={styles.commonPaperInput}
+                      theme={{
+                        ...styles.inputTheme,
+                        fonts: {
+                          ...styles.inputTheme?.fonts,
+                          bodyLarge: { fontSize: 18 },
+                        },
+                      }}
+                      placeholder="Enter Username"
+                      autoCapitalize="none"
+                      left={<PaperTextInput.Icon icon="account" color={colors.themeColor} />}
+                      onChangeText={(value) =>
+                        setStudentData({ ...studentData, username: value })
+                      }
+                    />
+                    <PaperTextInput
+                      mode="outlined"
+                      label="Password"
+                      value={studentData?.password}
+                      outlineColor={colors.themeColor}
+                      activeOutlineColor={colors.themeColor}
+                      style={styles.commonPaperInput}
+                      theme={{
+                        ...styles.inputTheme,
+                        fonts: {
+                          ...styles.inputTheme?.fonts,
+                          bodyLarge: { fontSize: 18 },
+                        },
+                      }}
+                      placeholder="Enter Password"
+                      secureTextEntry={!showPassword}
+                      left={<PaperTextInput.Icon icon="lock" color={colors.themeColor} />}
+                      right={
+                        <PaperTextInput.Icon
+                          icon={showPassword ? "eye" : "eye-off"}
+                          onPress={() => setShowPassword((prev) => !prev)}
+                        />
+                      }
+                      onChangeText={(value) =>
+                        setStudentData({ ...studentData, password: value })
+                      }
+                    />
+                    <View style={styles.optionsRow}>
+                      <Pressable
+                        onPress={() => setForgotModalVisible(true)}
+                        style={({ pressed }) => [pressed && { opacity: 0.6 }]}
+                      >
+                        <Text style={styles.forgotText}>Forgot Password?</Text>
+                      </Pressable>
+                    </View>
+
+                    {showModal && showErorMsg !== '' && (
+                      <SuccessModal showModal={showModal} closeModal={closeModal} message={showErorMsg} />
+                    )}
+
+                    {/* Login Button */}
                     <Pressable
-                      onPress={() => setForgotModalVisible(true)}
-                      style={({ pressed }) => [pressed && { opacity: 0.6 }]}
+                      style={({ pressed }) => [
+                        styles.loginButton,
+                        pressed && { opacity: 0.6 },
+                      ]}
+                      onPress={() => {
+                        if (!studentData.prn_no || !studentData.username || !studentData.password) {
+                          setErrorMsg('Please Enter Username and Password!');
+                          setShowModal(true);
+                        } else {
+                          loginApi(studentData);
+                        }
+                      }}
                     >
-                      <Text style={styles.forgotText}>Forgot Password?</Text>
+                      <Text style={styles.loginText}>Login</Text>
                     </Pressable>
                   </View>
-
-                  {showModal && showErorMsg !== '' && (
-                    <SuccessModal showModal={showModal} closeModal={closeModal} message={showErorMsg} />
-                  )}
-
-                  {/* Login Button */}
-                  <Pressable
-                    style={({ pressed }) => [
-                      styles.loginButton,
-                      pressed && { opacity: 0.6 },
-                    ]}
-                    onPress={() => {
-                      if (!facultyData.username || !facultyData.password) {
-                        setErrorMsg('Please Enter Username and Password!');
-                        setShowModal(true);
-                      } else {
-                        loginApi(facultyData);
-                      }
-                    }}
-                  >
-                    <Text style={styles.loginText}>Login</Text>
-                  </Pressable>
                 </View>
-              </View>
-            </KeyboardAvoidingView>
-          </TouchableWithoutFeedback>
+              </KeyboardAvoidingView>
+            </TouchableWithoutFeedback>
+          </ScrollView>
         </SafeAreaView>
       )}
     </>

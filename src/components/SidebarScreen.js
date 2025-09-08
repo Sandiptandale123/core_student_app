@@ -29,23 +29,24 @@ const SidebarScreen = (props) => {
   //   props.userInfo,
   //   'props.userInfoprops.userInfoprops.userInfodrawer',
   // );
-  // const facultyInfo = useSelector(state => state.userState?.facultyInfo);
-  // console.log(JSON.stringify(facultyInfo), "sidebar.facultyInfo")
-  const [facultyInfo, setFacultyInfo] = useState(null);
+  // const studentInfo = useSelector(state => state.userState?.studentInfo);
+  // console.log(JSON.stringify(studentInfo), "sidebar.studentInfo")
+  const [studentInfo, setStudentInfo] = useState(null);
   useEffect(() => {
     const getUserData = async () => {
       try {
-        const storedUser = await AsyncStorage.getItem('facultyInfo');
+        const storedUser = await AsyncStorage.getItem('studentInfo');
         if (storedUser) {
-          setFacultyInfo(JSON.parse(storedUser));
+          setStudentInfo(JSON.parse(storedUser));
         }
       } catch (error) {
-        console.log("Error loading facultyInfo:", error);
+        console.log("Error loading studentInfo:", error);
       }
     };
 
     getUserData();
   }, []);
+  //console.log(JSON.stringify(studentInfo), "sidebar.studentInfo")
   const clearStorage = () => {
     //UserAction.resetUserDetails();
     navigation.navigate('SplashScreen');
@@ -59,20 +60,20 @@ const SidebarScreen = (props) => {
       color: '#007CCD'
     },
     {
-      name: 'Attendance',
+      name: 'Payment List',
       id: 2,
-      icon: require('../assets/class_schedule_icon.png'),
+      icon: require('../assets/exam_results.png'),
       color: '#3F8DE8',
     },
-    {
-      name: 'Marks Entry',
-      id: 3,
-      icon: require('../assets/attendance_icon.png'),
-      color: '#9C27B0'
-    },
+    // {
+    //   name: 'Marks Entry',
+    //   id: 3,
+    //   icon: require('../assets/attendance_icon.png'),
+    //   color: '#9C27B0'
+    // },
     {
       name: 'Password',
-      id: 4,
+      id: 3,
       icon: require('../assets/password_icon.png'),
       color: '#5EC878',
     },
@@ -200,12 +201,16 @@ const SidebarScreen = (props) => {
         {/* Profile Section */}
         <View style={styles.profileSection}>
           <Image
-            source={require('../assets/profile_picture.png')}
+            source={
+              studentInfo?.photoPath && studentInfo?.photoPath !== ''
+                ? { uri: studentInfo?.photoPath }
+                : require('../assets/profile_picture.png')
+            }
             style={styles.profileImg}
           />
           <View style={{ marginHorizontal: 10, justifyContent: 'center', alignItems: 'flex-start', }}>
-            <Text style={styles.userName}>{facultyInfo?.userFullName}</Text>
-            <Text style={styles.userEmail}>{facultyInfo?.emailId}</Text>
+            <Text style={styles.userName}>{studentInfo?.firstName}  {studentInfo?.lastName}</Text>
+            <Text style={styles.userEmail}>{studentInfo?.studeMailId}</Text>
           </View>
         </View>
 
@@ -220,14 +225,11 @@ const SidebarScreen = (props) => {
                 style={styles.menuItem}
                 onPress={() => {
                   if (item.id === 1) {
-                    navigation.navigate('ProfileScreen', { facultyInfo: facultyInfo });
+                    navigation.navigate('ProfileScreen', { studentInfo: studentInfo });
                     navigation.closeDrawer();
                   } else if (item.id === 2) {
-                    navigation.navigate('ClassTimeTableScreen', { facultyInfo: facultyInfo });
+                    navigation.navigate('PaymentListScreen', { studentInfo: studentInfo });
                   } else if (item.id === 3) {
-                    navigation.navigate('CourseWiseMarksEntry', { facultyInfo: facultyInfo });
-                    navigation.closeDrawer();
-                  } else if (item.id === 4) {
                     setForgotModalVisible(true)
                   }
                 }}>
@@ -257,10 +259,10 @@ const SidebarScreen = (props) => {
                       onPress={() => {
                         // Add conditional navigation here
                         if (sub.id === 2.1) {
-                          navigation.navigate('ClassTimeTableScreen', { facultyInfo: facultyInfo });
+                          navigation.navigate('ClassTimeTableScreen', { studentInfo: studentInfo });
                         }
                         else if (sub.id === 2.2) {
-                          navigation.navigate('CourseWiseMarksEntry', { facultyInfo: facultyInfo });
+                          navigation.navigate('CourseWiseMarksEntry', { studentInfo: studentInfo });
                         }
                         else if (sub.id === 4.1) {
                           navigation.navigate('MarksEntryScreen');

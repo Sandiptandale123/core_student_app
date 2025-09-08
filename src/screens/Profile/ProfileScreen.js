@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  ScrollView, PermissionsAndroid, Platform, Alert
+  ScrollView, PermissionsAndroid, Platform, Alert, UIManager, LayoutAnimation
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Picker } from '@react-native-picker/picker';
@@ -18,14 +18,18 @@ import moment from 'moment';
 import Api from '../../utils/Api';
 import Loader from '../../components/Loader/Loader';
 import { TextInput as PaperTextInput } from 'react-native-paper';
-
+// Android me smooth animation ke liye
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 const ProfileScreen = props => {
   const { navigation } = props;
-  const { facultyInfo } = props.route.params
-  //console.log("printuserdata", JSON.stringify(facultyInfo))
+  const { studentInfo } = props.route.params
+  //console.log("ProfileScreenprintuserdata", JSON.stringify(studentInfo))
   const [fullName, setFullName] = useState('');
-  const [profileImage, setProfileImage] = useState(null);
+  const [profileImage, setProfileImage] = useState(studentInfo?.photoPath);
   const [gender, setGender] = useState('');
+  const [selectTab, setSelectTab] = useState(1)
   // Inside your component:
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [phone, setPhone] = useState('');
@@ -35,29 +39,56 @@ const ProfileScreen = props => {
   // Instead of string, use Date object
   const [dob, setDob] = useState(null);
   const [dobText, setDobText] = useState(''); // display purpose
-  const [facultyData, setFacultyData] = useState(null)
+  const [studentData, setStudentData] = useState(null)
   const [showErorMsg, setErrorMsg] = useState('');
   const [inputHeight, setInputHeight] = useState(45);
+
+  // Dropdown states for each section
+  const [isOpen1, setIsOpen1] = useState(true);
+  const [isOpen2, setIsOpen2] = useState(false);
+  const [isOpen3, setIsOpen3] = useState(false);
+
+  const toggleSection1 = () => {
+    LayoutAnimation.easeInEaseOut();
+    setIsOpen1(!isOpen1);
+    setIsOpen2(false);
+    setIsOpen3(false);
+  };
+
+  const toggleSection2 = () => {
+    LayoutAnimation.easeInEaseOut();
+    setIsOpen1(false);
+    setIsOpen2(!isOpen2);
+    setIsOpen3(false);
+  };
+
+  const toggleSection3 = () => {
+    LayoutAnimation.easeInEaseOut();
+    setIsOpen1(false);
+    setIsOpen2(false);
+    setIsOpen3(!isOpen3);
+  };
+
   useEffect(() => {
-    facultyProfileApi();
+    studentProfileApi();
   }, []);
-  const facultyProfileApi = () => {
+  const studentProfileApi = () => {
     setErrorMsg('');
-    if (facultyInfo.sysUserID && facultyInfo.databaseName) {
+    if (studentInfo.studentID) {
       setLoader(true);
       const params = {
-        LoginID: facultyInfo.sysUserID,
-        DatabaseName: facultyInfo.databaseName
+        StudentID: studentInfo.studentID,
+        //DatabaseName: studentInfo.databaseName
         // UserName: 'aabhondwe',
         // Password: '123456789'
       };
-      Api.getApi('BasicExaminer/GetBasicExaminerListBySysUserIDForprofile', params)
+      Api.getApi('StudentProfile/GetStudentProfileDetailsList', params)
         .then(response => {
           if (response.status === 200) {
             //console.log("print response && response.data[0]", JSON.stringify(response.data[0]))
             setLoader(false);
             //dispatch({ type: SET_USER, payload: response.data[0] });
-            setFacultyData(response.data[0])
+            setStudentData(response.data[0])
             //timeout();
           } else {
             Alert(response.data.message);
@@ -74,7 +105,7 @@ const ProfileScreen = props => {
       setErrorMsg('Please Enter Username and Password!');
     }
   };
-
+  //console.log("studentData", JSON.stringify(studentData))
 
   const onChangeDate = (event, selectedDate) => {
     setShowDatePicker(false);
@@ -161,6 +192,373 @@ const ProfileScreen = props => {
     );
   };
   const [modalVisible, setModalVisible] = useState(false);
+
+  const PersonalInfo1 = () => {
+    return (
+      <View>
+        {/* <View style={styles.profileContainer}>
+          <Image
+            source={
+              profileImage
+                ? { uri: profileImage }
+                : require('../../assets/profile_picture.png')
+            }
+            style={styles.profileImage}
+          />
+        </View> */}
+        <PaperTextInput
+          mode="outlined"
+          label={<Text style={styles.labelText}>Full Name</Text>}
+          value={studentData?.studentName}
+          editable={false}
+          outlineColor={colors.themeColor}
+          activeOutlineColor={colors.themeColor}
+          style={styles.commonPaperInput}
+          theme={styles.inputTheme}
+          render={(props) => (
+            <View style={styles.inputWrapper}>
+              <PaperTextInput.Icon icon="account" color={colors.themeColor} style={styles.iconStyle} size={20} />
+              <TextInput {...props} style={styles.inputText} />
+            </View>
+          )}
+        />
+        <PaperTextInput
+          mode="outlined"
+          label={<Text style={styles.labelText}>Father /Husband Name</Text>}
+          value={studentData?.fatherFirstName !== null ? studentData?.fatherFirstName : '-'}
+          editable={false}
+          outlineColor={colors.themeColor}
+          activeOutlineColor={colors.themeColor}
+          style={styles.commonPaperInput}
+          theme={styles.inputTheme}
+          render={(props) => (
+            <View style={styles.inputWrapper}>
+              <PaperTextInput.Icon icon="account-outline" color={colors.themeColor} style={styles.iconStyle} size={20} />
+              <TextInput {...props} style={styles.inputText} />
+            </View>
+          )}
+        />
+        <PaperTextInput
+          mode="outlined"
+          label={<Text style={styles.labelText}>Mother Name</Text>}
+          value={studentData?.studentMothersName}
+          editable={false}
+          outlineColor={colors.themeColor}
+          activeOutlineColor={colors.themeColor}
+          style={styles.commonPaperInput}
+          theme={styles.inputTheme}
+          render={(props) => (
+            <View style={styles.inputWrapper}>
+              <PaperTextInput.Icon icon="account-heart-outline" color={colors.themeColor} style={styles.iconStyle} size={20} />
+              <TextInput {...props} style={styles.inputText} />
+            </View>
+          )}
+        />
+        {/* Gender */}
+        <PaperTextInput
+          mode="outlined"
+          label={<Text style={styles.labelText}>Gender</Text>}
+          value={studentData?.gender}
+          editable={false}
+          outlineColor={colors.themeColor}
+          activeOutlineColor={colors.themeColor}
+          style={styles.commonPaperInput}
+          theme={styles.inputTheme}
+          render={(props) => (
+            <View style={styles.inputWrapper}>
+              <PaperTextInput.Icon icon="gender-male-female" color={colors.themeColor} style={styles.iconStyle} size={20} />
+              <TextInput {...props} style={styles.inputText} />
+            </View>
+          )}
+        />
+
+        {/* Phone */}
+        <PaperTextInput
+          mode="outlined"
+          label={<Text style={styles.labelText}>Mobile No</Text>}
+          value={studentData?.studentMobileNo}
+          editable={false}
+          outlineColor={colors.themeColor}
+          activeOutlineColor={colors.themeColor}
+          style={styles.commonPaperInput}
+          theme={styles.inputTheme}
+          render={(props) => (
+            <View style={styles.inputWrapper}>
+              <PaperTextInput.Icon icon="phone" color={colors.themeColor} style={styles.iconStyle} size={20} />
+              <TextInput {...props} style={styles.inputText} />
+            </View>
+          )}
+        />
+
+        {/* Email */}
+        <PaperTextInput
+          mode="outlined"
+          label={<Text style={styles.labelText}>Email</Text>}
+          value={studentData?.studentMailID}
+          editable={false}
+          outlineColor={colors.themeColor}
+          activeOutlineColor={colors.themeColor}
+          style={styles.commonPaperInput}
+          theme={styles.inputTheme}
+          render={(props) => (
+            <View style={styles.inputWrapper}>
+              <PaperTextInput.Icon icon="email" color={colors.themeColor} style={styles.iconStyle} size={20} />
+              <TextInput {...props} style={styles.inputText} />
+            </View>
+          )}
+        />
+      </View>
+    )
+  }
+
+  const PersonalInfo2 = () => {
+    return (
+      <View>
+        <PaperTextInput
+          mode="outlined"
+          label={<Text style={styles.labelText}>Religion</Text>}
+          value={studentData?.personalInfoII?.religionDescription}
+          editable={false}
+          outlineColor={colors.themeColor}
+          activeOutlineColor={colors.themeColor}
+          style={styles.commonPaperInput}
+          theme={styles.inputTheme}
+          render={(props) => (
+            <View style={styles.inputWrapper}>
+              <PaperTextInput.Icon icon="account-star" color={colors.themeColor} style={styles.iconStyle} size={20} />
+              <TextInput {...props} style={styles.inputText} />
+            </View>
+          )}
+        />
+        <PaperTextInput
+          mode="outlined"
+          label={<Text style={styles.labelText}>Caste</Text>}
+          value={studentData?.personalInfoII?.reservationCategoryName}
+          editable={false}
+          outlineColor={colors.themeColor}
+          activeOutlineColor={colors.themeColor}
+          style={styles.commonPaperInput}
+          theme={styles.inputTheme}
+          render={(props) => (
+            <View style={styles.inputWrapper}>
+              <PaperTextInput.Icon icon="account-group" color={colors.themeColor} style={styles.iconStyle} size={20} />
+              <TextInput {...props} style={styles.inputText} />
+            </View>
+          )}
+        />
+        <PaperTextInput
+          mode="outlined"
+          label={<Text style={styles.labelText}>Caste Category</Text>}
+          value={studentData?.personalInfoII?.religionDescription}
+          editable={false}
+          outlineColor={colors.themeColor}
+          activeOutlineColor={colors.themeColor}
+          style={styles.commonPaperInput}
+          theme={styles.inputTheme}
+          render={(props) => (
+            <View style={styles.inputWrapper}>
+              <PaperTextInput.Icon icon="account-group" color={colors.themeColor} style={styles.iconStyle} size={20} />
+              <TextInput {...props} style={styles.inputText} />
+            </View>
+          )}
+        />
+        <PaperTextInput
+          mode="outlined"
+          label={<Text style={styles.labelText}>Blood Group</Text>}
+          value={studentData?.personalInfoII?.studentBloodGroup !== '' ? studentData?.personalInfoII?.studentBloodGroup : '-'}
+          editable={false}
+          outlineColor={colors.themeColor}
+          activeOutlineColor={colors.themeColor}
+          style={styles.commonPaperInput}
+          theme={styles.inputTheme}
+          render={(props) => (
+            <View style={styles.inputWrapper}>
+              <PaperTextInput.Icon icon="blood-bag" color={colors.themeColor} style={styles.iconStyle} size={20} />
+              <TextInput {...props} style={styles.inputText} />
+            </View>
+          )}
+        />
+        {/* Date of Birth */}
+        <PaperTextInput
+          mode="outlined"
+          label={<Text style={styles.labelText}>Date of Birth</Text>}
+          value={moment(studentData?.personalInfoII?.studentBirthDate).format('DD-MM-YYYY')}
+          editable={false}
+          outlineColor={colors.themeColor}
+          activeOutlineColor={colors.themeColor}
+          style={styles.commonPaperInput}
+          theme={styles.inputTheme}
+          render={(props) => (
+            <View style={styles.inputWrapper}>
+              <PaperTextInput.Icon icon="calendar" color={colors.themeColor} style={styles.iconStyle} size={20} />
+              <TextInput {...props} style={styles.inputText} />
+            </View>
+          )}
+        />
+
+        {/* Gender */}
+        <PaperTextInput
+          mode="outlined"
+          label={<Text style={styles.labelText}>Physical Disability</Text>}
+          value={studentData?.personalInfoII?.physicalDisabilityName}
+          editable={false}
+          outlineColor={colors.themeColor}
+          activeOutlineColor={colors.themeColor}
+          style={styles.commonPaperInput}
+          theme={styles.inputTheme}
+          render={(props) => (
+            <View style={styles.inputWrapper}>
+              <PaperTextInput.Icon icon="wheelchair-accessibility" color={colors.themeColor} style={styles.iconStyle} size={20} />
+              <TextInput {...props} style={styles.inputText} />
+            </View>
+          )}
+        />
+
+        {/* Phone */}
+        <PaperTextInput
+          mode="outlined"
+          label={<Text style={styles.labelText}>Aadhar No</Text>}
+          value={studentData?.personalInfoII?.aadharNoID}
+          editable={false}
+          outlineColor={colors.themeColor}
+          activeOutlineColor={colors.themeColor}
+          style={styles.commonPaperInput}
+          theme={styles.inputTheme}
+          render={(props) => (
+            <View style={styles.inputWrapper}>
+              <PaperTextInput.Icon icon="card-account-details" color={colors.themeColor} style={styles.iconStyle} size={20} />
+              <TextInput {...props} style={styles.inputText} />
+            </View>
+          )}
+        />
+
+        {/* Email */}
+        <PaperTextInput
+          mode="outlined"
+          label={<Text style={styles.labelText}>ABC ID</Text>}
+          value={studentData?.personalInfoII?.abcid}
+          editable={false}
+          outlineColor={colors.themeColor}
+          activeOutlineColor={colors.themeColor}
+          style={styles.commonPaperInput}
+          theme={styles.inputTheme}
+          render={(props) => (
+            <View style={styles.inputWrapper}>
+              <PaperTextInput.Icon icon="card-account-details-outline" color={colors.themeColor} style={styles.iconStyle} size={20} />
+              <TextInput {...props} style={styles.inputText} />
+            </View>
+          )}
+        />
+      </View>
+    )
+  }
+
+  const PersonalInfo3 = () => {
+    return (
+      <View>
+        <PaperTextInput
+          mode="outlined"
+          label={<Text style={styles.labelText}>Address</Text>}
+          value={studentData?.studentAddress?.studentAddress1}
+          editable={false}
+          outlineColor={colors.themeColor}
+          activeOutlineColor={colors.themeColor}
+          style={styles.commonPaperInput}
+          theme={styles.inputTheme}
+          render={(props) => (
+            <View style={styles.inputWrapper}>
+              <PaperTextInput.Icon icon="home-map-marker" color={colors.themeColor} style={styles.iconStyle} size={20} />
+              <TextInput {...props} style={styles.inputText} />
+            </View>
+          )}
+        />
+        <PaperTextInput
+          mode="outlined"
+          label={<Text style={styles.labelText}>State</Text>}
+          value={studentData?.studentAddress?.stateName}
+          editable={false}
+          outlineColor={colors.themeColor}
+          activeOutlineColor={colors.themeColor}
+          style={styles.commonPaperInput}
+          theme={styles.inputTheme}
+          render={(props) => (
+            <View style={styles.inputWrapper}>
+              <PaperTextInput.Icon icon="map" color={colors.themeColor} style={styles.iconStyle} size={20} />
+              <TextInput {...props} style={styles.inputText} />
+            </View>
+          )}
+        />
+        <PaperTextInput
+          mode="outlined"
+          label={<Text style={styles.labelText}>District</Text>}
+          value={studentData?.studentAddress?.districtName !== '' ? studentData?.studentAddress?.districtName : '-'}
+          editable={false}
+          outlineColor={colors.themeColor}
+          activeOutlineColor={colors.themeColor}
+          style={styles.commonPaperInput}
+          theme={styles.inputTheme}
+          render={(props) => (
+            <View style={styles.inputWrapper}>
+              <PaperTextInput.Icon icon="map-marker-radius" color={colors.themeColor} style={styles.iconStyle} size={20} />
+              <TextInput {...props} style={styles.inputText} />
+            </View>
+          )}
+        />
+        <PaperTextInput
+          mode="outlined"
+          label={<Text style={styles.labelText}>Tahsil</Text>}
+          value={studentData?.studentAddress?.tahsilName !== '' ? studentData?.studentAddress?.tahsilName : '-'}
+          editable={false}
+          outlineColor={colors.themeColor}
+          activeOutlineColor={colors.themeColor}
+          style={styles.commonPaperInput}
+          theme={styles.inputTheme}
+          render={(props) => (
+            <View style={styles.inputWrapper}>
+              <PaperTextInput.Icon icon="map-marker-outline" color={colors.themeColor} style={styles.iconStyle} size={20} />
+              <TextInput {...props} style={styles.inputText} />
+            </View>
+          )}
+        />
+        {/* Date of Birth */}
+        <PaperTextInput
+          mode="outlined"
+          label={<Text style={styles.labelText}>City / Town / Village</Text>}
+          value={studentData?.studentAddress?.studentLocalCity !== '' ? studentData?.studentAddress?.studentLocalCity : '-'}
+          editable={false}
+          outlineColor={colors.themeColor}
+          activeOutlineColor={colors.themeColor}
+          style={styles.commonPaperInput}
+          theme={styles.inputTheme}
+          render={(props) => (
+            <View style={styles.inputWrapper}>
+              <PaperTextInput.Icon icon="city" color={colors.themeColor} style={styles.iconStyle} size={20} />
+              <TextInput {...props} style={styles.inputText} />
+            </View>
+          )}
+        />
+
+        {/* Gender */}
+        <PaperTextInput
+          mode="outlined"
+          label={<Text style={styles.labelText}>Pincode</Text>}
+          value={studentData?.studentAddress?.studentPinCode !== '' ? studentData?.studentAddress?.studentPinCode : '-'}
+          editable={false}
+          outlineColor={colors.themeColor}
+          activeOutlineColor={colors.themeColor}
+          style={styles.commonPaperInput}
+          theme={styles.inputTheme}
+          render={(props) => (
+            <View style={styles.inputWrapper}>
+              <PaperTextInput.Icon icon="form-textbox" color={colors.themeColor} style={styles.iconStyle} size={20} />
+              <TextInput {...props} style={styles.inputText} />
+            </View>
+          )}
+        />
+      </View>
+    )
+  }
+
   return (
     <>
       {showLoader ? (
@@ -192,207 +590,48 @@ const ProfileScreen = props => {
         </TouchableOpacity>
 
       </View> */}
-        <View style={styles.profileContainer}>
-          <Image
-            source={
-              profileImage
-                ? { uri: profileImage }
-                : require('../../assets/profile_picture.png')
-            }
-            style={styles.profileImage}
+
+        <TouchableOpacity
+          style={styles.dropdownHeader}
+          onPress={toggleSection1}
+        >
+          <Text style={styles.dropdownHeaderText}>Personal Info 1</Text>
+          <Icon
+            name={isOpen1 ? 'chevron-up' : 'chevron-down'}
+            size={24}
+            color="#FFFFFF"
           />
-        </View>
-        {/* Full Name */}
-        <PaperTextInput
-          mode="outlined"
-          label={<Text style={styles.labelText}>Full Name</Text>}
-          value={facultyData?.examinerName}
-          editable={false}
-          outlineColor={colors.themeColor}
-          activeOutlineColor={colors.themeColor}
-          style={styles.commonPaperInput}
-          theme={styles.inputTheme}
-          render={(props) => (
-            <View style={styles.inputWrapper}>
-              <PaperTextInput.Icon icon="account" color={colors.themeColor} style={styles.iconStyle} size={20}/>
-              <TextInput {...props} style={styles.inputText} />
-            </View>
-          )}
-        />
+        </TouchableOpacity>
+        {isOpen1 && <PersonalInfo1 />}
 
-        {/* Date of Birth */}
-        <PaperTextInput
-          mode="outlined"
-          label={<Text style={styles.labelText}>Date of Birth</Text>}
-          value={moment(facultyData?.examinerDateOfBirth).format('DD-MM-YYYY')}
-          editable={false}
-          outlineColor={colors.themeColor}
-          activeOutlineColor={colors.themeColor}
-          style={styles.commonPaperInput}
-          theme={styles.inputTheme}
-          render={(props) => (
-            <View style={styles.inputWrapper}>
-              <PaperTextInput.Icon icon="calendar" color={colors.themeColor} style={styles.iconStyle} size={20}/>
-              <TextInput {...props} style={styles.inputText} />
-            </View>
-          )}
-        />
+        {/* Personal Info 2 */}
+        <TouchableOpacity
+          style={styles.dropdownHeader}
+          onPress={toggleSection2}
+        >
+          <Text style={styles.dropdownHeaderText}>Personal Info 2</Text>
+          <Icon
+            name={isOpen2 ? 'chevron-up' : 'chevron-down'}
+            size={24}
+            color="#FFFFFF"
+          />
+        </TouchableOpacity>
+        {isOpen2 && <PersonalInfo2 />}
 
-        {/* Gender */}
-        <PaperTextInput
-          mode="outlined"
-          label={<Text style={styles.labelText}>Gender</Text>}
-          value={facultyData?.examinerGenderDesc}
-          editable={false}
-          outlineColor={colors.themeColor}
-          activeOutlineColor={colors.themeColor}
-          style={styles.commonPaperInput}
-          theme={styles.inputTheme}
-          render={(props) => (
-            <View style={styles.inputWrapper}>
-              <PaperTextInput.Icon icon="gender-male-female" color={colors.themeColor} style={styles.iconStyle} size={20}/>
-              <TextInput {...props} style={styles.inputText} />
-            </View>
-          )}
-        />
+        {/* Personal Info 3 */}
+        <TouchableOpacity
+          style={styles.dropdownHeader}
+          onPress={toggleSection3}
+        >
+          <Text style={styles.dropdownHeaderText}>Personal Info 3</Text>
+          <Icon
+            name={isOpen3 ? 'chevron-up' : 'chevron-down'}
+            size={24}
+            color="#FFFFFF"
+          />
+        </TouchableOpacity>
+        {isOpen3 && <PersonalInfo3 />}
 
-        {/* Phone */}
-        <PaperTextInput
-          mode="outlined"
-          label={<Text style={styles.labelText}>Phone</Text>}
-          value={facultyData?.examinerMobileNo}
-          editable={false}
-          outlineColor={colors.themeColor}
-          activeOutlineColor={colors.themeColor}
-          style={styles.commonPaperInput}
-          theme={styles.inputTheme}
-          render={(props) => (
-            <View style={styles.inputWrapper}>
-              <PaperTextInput.Icon icon="phone" color={colors.themeColor} style={styles.iconStyle} size={20}/>
-              <TextInput {...props} style={styles.inputText} />
-            </View>
-          )}
-        />
-
-        {/* Email */}
-        <PaperTextInput
-          mode="outlined"
-          label={<Text style={styles.labelText}>Email</Text>}
-          value={facultyData?.examinerEmailID}
-          editable={false}
-          outlineColor={colors.themeColor}
-          activeOutlineColor={colors.themeColor}
-          style={styles.commonPaperInput}
-          theme={styles.inputTheme}
-          render={(props) => (
-            <View style={styles.inputWrapper}>
-              <PaperTextInput.Icon icon="mail" color={colors.themeColor} style={styles.iconStyle} size={20}/>
-              <TextInput {...props} style={styles.inputText} />
-            </View>
-          )}
-        />
-
-        {/* Department */}
-        <PaperTextInput
-          mode="outlined"
-          label={<Text style={styles.labelText}>Department</Text>}
-          value={facultyData?.departmentName}
-          editable={false}
-          outlineColor={colors.themeColor}
-          activeOutlineColor={colors.themeColor}
-          style={styles.commonPaperInput}
-          theme={styles.inputTheme}
-          render={(props) => (
-            <View style={styles.inputWrapper}>
-              <PaperTextInput.Icon icon="office-building" color={colors.themeColor} style={styles.iconStyle} size={20}/>
-              <TextInput {...props} style={styles.inputText} />
-            </View>
-          )}
-        />
-
-        {/* College */}
-        <PaperTextInput
-          mode="outlined"
-          label={<Text style={styles.labelText}>College</Text>}
-          value={facultyData?.collegeName}
-          editable={false}
-          outlineColor={colors.themeColor}
-          activeOutlineColor={colors.themeColor}
-          style={styles.commonPaperInput}
-          theme={styles.inputTheme}
-          render={(props) => (
-            <View style={styles.inputWrapper}>
-              <PaperTextInput.Icon icon="school" color={colors.themeColor} style={styles.iconStyle} size={20}/>
-              <TextInput {...props} style={styles.inputText} />
-            </View>
-          )}
-        />
-
-        {/* Address */}
-        <PaperTextInput
-          mode="outlined"
-          label={<Text style={styles.labelText}>Address</Text>}
-          value={facultyData?.examinerAddress1?.trim() ? facultyData.examinerAddress1 : "--"}
-          editable={false}
-          outlineColor={colors.themeColor}
-          activeOutlineColor={colors.themeColor}
-          style={styles.commonPaperInput}
-          theme={styles.inputTheme}
-          render={(props) => (
-            <View style={styles.inputWrapper}>
-              <PaperTextInput.Icon icon="map-marker" color={colors.themeColor} style={styles.iconStyle}  size={20}/>
-              <TextInput {...props} style={styles.inputText} />
-            </View>
-          )}
-        />
-
-        {/* <PaperTextInput
-          mode="outlined"
-          label={<Text style={styles.label}>Address</Text>}
-          value={
-            facultyData?.examinerAddress1?.trim()
-              ? facultyData.examinerAddress1
-              : "--"
-          }
-          multiline
-          editable={false}
-          placeholder="Address"
-          outlineColor={colors.themeColor}
-          activeOutlineColor={colors.themeColor}
-          left={<PaperTextInput.Icon icon="account" />}
-          style={[
-            styles.paperInput,
-            {
-              minHeight: 60,
-              maxHeight: 100,   // 👈 isse jyada height nahi badhegi
-              textAlignVertical: 'top',
-            },
-          ]}
-          onContentSizeChange={(e) =>
-            setInputHeight(Math.max(60, e.nativeEvent.contentSize.height))
-          }
-          theme={{
-            roundness: 10,   // Border radius
-            colors: {
-              primary: colors.themeColor,
-              text: colors.black,
-              placeholder: '#999',
-            },
-          }}
-        /> */}
-
-        {/* <Text style={styles.label}>Address</Text>
-        <TextInput
-          value={facultyData?.examinerAddress1}
-          placeholder="Enter your address"
-          style={[styles.inputStyle, { height: Math.max(45, inputHeight), textAlignVertical: 'top', marginBottom: 80, }]}
-          placeholderTextColor={colors.lightGrey}
-          multiline={true}
-          editable={false}
-          onContentSizeChange={(e) =>
-            setInputHeight(e.nativeEvent.contentSize.height)
-          }
-        /> */}
         {showErorMsg !== '' && (
           <Text style={styles.errorText}>{showErorMsg}</Text>
         )}
@@ -448,7 +687,7 @@ const styles = StyleSheet.create({
 
   iconStyle: {
     marginLeft: 10,
-    paddingLeft:5,
+    paddingLeft: 5,
   },
 
   inputText: {
@@ -468,4 +707,23 @@ const styles = StyleSheet.create({
       placeholder: '#999',
     },
   },
+  dropdownHeader: {
+    backgroundColor: colors.themeColor,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    width: '100%',
+    alignSelf: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  
+  dropdownHeaderText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontFamily: 'Montserrat-Bold',
+  },
+  
 });

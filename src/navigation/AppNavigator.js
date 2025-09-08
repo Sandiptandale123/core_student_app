@@ -26,7 +26,8 @@ import CourseWiseMarksEntry from '../screens/marksEntry/CourseWiseMarksEntry';
 import MarksEntryScreen from '../screens/marksEntry/MarksEntryScreen';
 import ClassAttendanceEntryScreen from '../screens/attendance/ClassAttendanceEntryScreen';
 import ClassAttendanceScreen2 from '../screens/attendance/ClassAttendanceScreen2';
-
+import PaymentListScreen from '../screens/payment/PaymentListScreen';
+import PaymentDetailsScreen from '../screens/paymentDetails/PaymentDetailsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -105,6 +106,34 @@ export default function AppNavigator() {
             <CustomHeader
               navigation={navigation}
               title="Basic Info"
+              showNotification={false}
+              showBack={true}
+            />
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="PaymentListScreen"
+        component={PaymentListScreen}
+        options={({ navigation }) => ({
+          header: () => (
+            <CustomHeader
+              navigation={navigation}
+              title="Payment List"
+              showNotification={false}
+              showBack={true}
+            />
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="PaymentDetailsScreen"
+        component={PaymentDetailsScreen}
+        options={({ navigation }) => ({
+          header: () => (
+            <CustomHeader
+              navigation={navigation}
+              title="Payment Details"
               showNotification={false}
               showBack={true}
             />

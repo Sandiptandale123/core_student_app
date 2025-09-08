@@ -14,52 +14,24 @@ import CustomHeader from '../../components/CustomHeader'; // 👈 Adjust path as
 import { carouselData } from '../../utils/carousel/carouselData';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const CARD_DATA = [
-  {
-    id: '1',
-    icon: 'home-outline',
-    title: 'Total Properties',
-    value: '124',
-  },
-  {
-    id: '2',
-    icon: 'list-outline',
-    title: 'Active Listings',
-    value: '57',
-  },
-  {
-    id: '3',
-    icon: 'person-outline',
-    title: 'Buyer Enquiries',
-    value: '36',
-  },
-  {
-    id: '4',
-    icon: 'stats-chart-outline',
-    title: 'Views (This Month)',
-    value: '842',
-  },
-];
-
 const numColumns = 2;
 const screenWidth = Dimensions.get('window').width;
 const cardWidth = screenWidth / numColumns - 30;
 
 
 const Dashboard = ({ navigation }) => {
-  const [facultyInfo, setFacultyInfo] = useState(null);
+  const [studentInfo, setStudentInfo] = useState(null);
   useEffect(() => {
     const getUserData = async () => {
       try {
-        const storedUser = await AsyncStorage.getItem('facultyInfo');
+        const storedUser = await AsyncStorage.getItem('studentInfo');
         if (storedUser) {
-          setFacultyInfo(JSON.parse(storedUser));
+          setStudentInfo(JSON.parse(storedUser));
         }
       } catch (error) {
-        console.log("Error loading facultyInfo:", error);
+        console.log("Error loading studentInfo:", error);
       }
     };
-
     getUserData();
   }, []);
   const carouselData = [
@@ -69,8 +41,8 @@ const Dashboard = ({ navigation }) => {
   ];
   const dashboardItems = [
     // { id: '1', title: 'Class Schedule', icon: require('../../assets/class_schedule_icon.png'), color: '#1976D2' },
-    { id: '1', title: 'Attendance', icon: require('../../assets/attendance_icon.png'), color: '#4CAF50' },
-    { id: '2', title: 'Marks Entry', icon: require('../../assets/exam_results.png'), color: '#9C27B0' },
+    { id: '1', title: 'Profile', icon: require('../../assets/icon_profile.png'), color: '#4CAF50' },
+    { id: '2', title: 'Payment List', icon: require('../../assets/exam_results.png'), color: '#2196F3'  },
     // { id: '4', title: 'Profile', icon: require('../../../assets/icon_profile.png'), color: '#2196F3' },
     // { id: '5', title: 'Test Exam Report', icon: 'document-text-outline', color: '#FFB300' },
     // { id: '6', title: 'LMS Report', icon: 'bar-chart-outline', color: '#009688' },
@@ -82,9 +54,9 @@ const Dashboard = ({ navigation }) => {
     ]}
       onPress={() => {
         if (item.id == 1) {
-          navigation.navigate('ClassTimeTableScreen', { facultyInfo: facultyInfo });
+          navigation.navigate('ProfileScreen', { studentInfo: studentInfo });
         } else if (item.id == 2) {
-          navigation.navigate('CourseWiseMarksEntry', { facultyInfo: facultyInfo });
+          navigation.navigate('PaymentListScreen', { studentInfo: studentInfo });
         }
         // else if (item.id == 3) {
         //   navigation.navigate('MarksEntryScreen')

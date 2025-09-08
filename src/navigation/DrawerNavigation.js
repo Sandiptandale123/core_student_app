@@ -34,7 +34,7 @@ export default function DrawerNavigation() {
         header: () => (
           <CustomHeader
             navigation={navigation}
-            title="Core"
+            title="Core Student App"
             showNotification={false}
           />
         ),

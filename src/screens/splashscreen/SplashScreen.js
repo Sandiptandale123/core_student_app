@@ -13,7 +13,7 @@ const SplashScreen = ({ navigation }) => {
     useEffect(() => {
         const checkLogin = async () => {
             try {
-                const storedUser = await AsyncStorage.getItem('facultyInfo');
+                const storedUser = await AsyncStorage.getItem('studentInfo');
                 if (storedUser) {
                     const parsedUser = JSON.parse(storedUser);
                     //console.log("printstoredUser", JSON.stringify(parsedUser))
