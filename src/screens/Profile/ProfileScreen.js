@@ -9,10 +9,7 @@ import {
   ScrollView, PermissionsAndroid, Platform, Alert, UIManager, LayoutAnimation
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import ImagePickerModal from '../../components/ImagePickerModal';
 import colors from '../../utils/colors';
 import moment from 'moment';
 import Api from '../../utils/Api';
@@ -105,93 +102,6 @@ const ProfileScreen = props => {
       setErrorMsg('Please Enter Username and Password!');
     }
   };
-  //console.log("studentData", JSON.stringify(studentData))
-
-  const onChangeDate = (event, selectedDate) => {
-    setShowDatePicker(false);
-    if (selectedDate) {
-      setDob(selectedDate); // set Date object
-      const formattedDate = selectedDate.toLocaleDateString('en-GB'); // e.g. 05/08/2025
-      setDobText(formattedDate);
-    }
-  };
-
-  const requestPermissions = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const permissions = [];
-
-        // Camera permission is needed
-        permissions.push(PermissionsAndroid.PERMISSIONS.CAMERA);
-
-        // For Android 13+
-        if (Platform.Version >= 33) {
-          permissions.push(PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES);
-        } else {
-          // For older Android versions
-          permissions.push(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE);
-        }
-
-        const granted = await PermissionsAndroid.requestMultiple(permissions);
-
-        const cameraGranted = granted[PermissionsAndroid.PERMISSIONS.CAMERA] === PermissionsAndroid.RESULTS.GRANTED;
-        const storageGranted =
-          (Platform.Version >= 33 &&
-            granted[PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES] === PermissionsAndroid.RESULTS.GRANTED) ||
-          (Platform.Version < 33 &&
-            granted[PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE] === PermissionsAndroid.RESULTS.GRANTED);
-
-        return cameraGranted && storageGranted;
-      } catch (err) {
-        console.warn(err);
-        return false;
-      }
-    } else {
-      return true;
-    }
-  };
-
-
-  const handleImagePick = async () => {
-    const hasPermission = await requestPermissions();
-    if (!hasPermission) {
-      Alert.alert("Permission denied", "Camera or Storage permission not granted");
-      return;
-    }
-
-    Alert.alert(
-      'Choose Option',
-      '',
-      [
-        {
-          text: 'Camera',
-          onPress: () => {
-            launchCamera({ mediaType: 'photo' }, (response) => {
-              if (!response.didCancel && !response.errorCode && response.assets) {
-                setProfileImage(response.assets[0].uri);
-              }
-            });
-          },
-        },
-        {
-          text: 'Gallery',
-          onPress: () => {
-            launchImageLibrary({ mediaType: 'photo' }, (response) => {
-              if (!response.didCancel && !response.errorCode && response.assets) {
-                setProfileImage(response.assets[0].uri);
-              }
-            });
-          },
-        },
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-      ],
-      { cancelable: true }
-    );
-  };
-  const [modalVisible, setModalVisible] = useState(false);
 
   const PersonalInfo1 = () => {
     return (
@@ -564,32 +474,6 @@ const ProfileScreen = props => {
       {showLoader ? (
         <Loader visible={showLoader} />
       ) : (<ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-
-        {modalVisible &&
-          <ImagePickerModal
-            showModal={modalVisible}
-            closeModal={() => setModalVisible(false)}
-            onImagePick={(uri) => setProfileImage(uri)}
-          />
-
-        }
-        {/* Profile Image */}
-        {/* <View style={styles.profileContainer}>
-        <Image
-          source={
-            profileImage
-              ? { uri: profileImage }
-              : require('../../../assets/user_profile.png')
-          }
-          style={styles.profileImage}
-        />
-
-        <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
-          <Icon name="camera" size={15} color="#000" />
-          <Text style={styles.addText}>Add</Text>
-        </TouchableOpacity>
-
-      </View> */}
 
         <TouchableOpacity
           style={styles.dropdownHeader}
