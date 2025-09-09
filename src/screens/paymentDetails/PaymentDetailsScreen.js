@@ -3,17 +3,18 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react
 import colors from '../../utils/colors';
 import Loader from '../../components/Loader/Loader';
 import Api from '../../utils/Api';
+import moment from 'moment';
 const PaymentDetailsScreen = props => {
     const { navigation } = props;
     const { item, studentInfo } = props.route.params;
-    const [facultyBasicSubjectList, setFacultyBasicSubjectList] = useState(null);
+    const [paymentDetailsData, setPaymentDetailsData] = useState(null);
     const [showErorMsg, setErrorMsg] = useState('');
     const [showLoader, setLoader] = useState(false);
     useEffect(() => {
-        fetchFacultyBasicSubjectList();
+        fetchPaymentDetailsApi();
     }, []);
 
-    const fetchFacultyBasicSubjectList = async () => {
+    const fetchPaymentDetailsApi = async () => {
         try {
             setErrorMsg('');
             if (!studentInfo?.studentID) {
@@ -36,7 +37,7 @@ const PaymentDetailsScreen = props => {
             //console.log("API Response:", JSON.stringify(response?.data));
 
             if (response?.status === 200) {
-                setFacultyBasicSubjectList(response.data[0] || []);
+                setPaymentDetailsData(response.data[0] || []);
             } else {
                 setLoader(false);
                 Alert.alert("Error", response?.data?.message || "Something went wrong");
@@ -92,24 +93,24 @@ const PaymentDetailsScreen = props => {
                         <View style={styles.body}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
                                 <Text style={styles.label}>Receipt Amount</Text>
-                                <Text numberOfLines={1} style={styles.value}>₹ {facultyBasicSubjectList?.totalAmount}</Text>
+                                <Text numberOfLines={1} style={styles.value}>Rs.{paymentDetailsData?.totalAmount}</Text>
                             </View>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
                                 <Text style={styles.label}>Transaction No</Text>
-                                <Text numberOfLines={1} style={styles.value}>{facultyBasicSubjectList?.txnID}</Text>
+                                <Text numberOfLines={1} style={styles.value}>{paymentDetailsData?.txnID}</Text>
                             </View>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
                                 <Text style={styles.label}>Transaction Date</Text>
-                                <Text numberOfLines={1} style={styles.value}>{facultyBasicSubjectList?.onlinePaymentConfirmDate}</Text>
+                                <Text numberOfLines={1} style={styles.value}>{moment(paymentDetailsData?.onlinePaymentConfirmDate).format('DD-MMM-YYYY')}</Text>
                             </View>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
                                 <Text style={styles.label}>Bank Referenece No</Text>
-                                <Text numberOfLines={1} style={styles.value}>{facultyBasicSubjectList?.bankRefereneceNo}</Text>
+                                <Text numberOfLines={1} style={styles.value}>{paymentDetailsData?.bankRefereneceNo}</Text>
                             </View>
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
                                 <Text style={styles.label}>Payment Mode</Text>
-                                <Text numberOfLines={1} style={styles.value}>{facultyBasicSubjectList?.strPaymentMode}</Text>
+                                <Text numberOfLines={1} style={styles.value}>{paymentDetailsData?.strPaymentMode}</Text>
                             </View>
                         </View>
                     </View>

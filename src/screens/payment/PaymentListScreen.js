@@ -10,14 +10,14 @@ import moment from 'moment';
 const PaymentListScreen = props => {
     const { navigation } = props;
     const { studentInfo } = props.route.params;
-    const [facultyBasicSubjectList, setFacultyBasicSubjectList] = useState(null);
+    const [paymentList, setPaymentList] = useState(null);
     const [showErorMsg, setErrorMsg] = useState('');
     const [showLoader, setLoader] = useState(false);
     useEffect(() => {
-        fetchFacultyBasicSubjectList();
+        fetchPaymentListApi();
     }, []);
 
-    const fetchFacultyBasicSubjectList = async () => {
+    const fetchPaymentListApi = async () => {
         try {
             setErrorMsg('');
             if (!studentInfo?.studentID) {
@@ -28,8 +28,8 @@ const PaymentListScreen = props => {
             setLoader(true);
 
             const params = {
-                StudentID: studentInfo.studentID,
-                AcademicInstanceID: studentInfo.academicInstanceID,
+                StudentID: studentInfo?.studentID,
+                AcademicInstanceID: studentInfo?.academicInstanceID,
                 DatabaseName: "",
             };
 
@@ -41,7 +41,7 @@ const PaymentListScreen = props => {
             //console.log("API Response:", JSON.stringify(response?.data));
 
             if (response?.status === 200) {
-                setFacultyBasicSubjectList(response.data || []);
+                setPaymentList(response.data || []);
             } else {
                 setLoader(false);
                 Alert.alert("Error", response?.data?.message || "Something went wrong");
@@ -52,7 +52,7 @@ const PaymentListScreen = props => {
             setErrorMsg(error?.response?.data?.message || "Failed to fetch data");
         }
     };
-    //console.log("facultyBasicSubjectListfacultyBasicSubjectList", JSON.stringify(facultyBasicSubjectList))
+    //console.log("facultyBasicSubjectListfacultyBasicSubjectList", JSON.stringify(paymentList))
     const PaymentCard = ({ item }) => {
         return (
             <View
@@ -86,7 +86,7 @@ const PaymentListScreen = props => {
                     {item.totalAmount !== null && item.totalAmount !== undefined ? (
                         <View style={styles.row}>
                             <Text style={styles.label}>Fees</Text>
-                            <Text style={styles.value}>₹ {String(item.totalAmount)}</Text>
+                            <Text style={styles.value}>Rs.{String(item.totalAmount)}</Text>
                         </View>
                     ) : null}
 
@@ -123,27 +123,27 @@ const PaymentListScreen = props => {
                     {showErorMsg !== '' && (
                         <Text style={styles.errorText}>{showErorMsg}</Text>
                     )}
-                    {facultyBasicSubjectList && facultyBasicSubjectList[0] && <View style={styles.card1}>
+                    {paymentList && paymentList[0] && <View style={styles.card1}>
                         <View style={styles.cardRow}>
                             <View style={{ flex: 1, paddingRight: 10 }}>
                                 <Text numberOfLines={2} style={[styles.subjectText, { fontFamily: 'Montserrat-Bold' }]}>
-                                    Student Name: {facultyBasicSubjectList[0].studentName}
+                                    Student Name: {paymentList[0].studentName}
                                 </Text>
                                 <Text numberOfLines={2} style={[styles.subjectText, { fontFamily: 'Montserrat-Bold' }]}>
-                                    PRN No: {facultyBasicSubjectList[0].prnno}
+                                    PRN No: {paymentList[0].prnno}
                                 </Text>
                                 <Text numberOfLines={2} style={[styles.subjectText, { fontFamily: 'Montserrat-Bold' }]}>
                                     {"Program Details"}
                                 </Text>
                                 <Text style={styles.subjectText}>
-                                    {facultyBasicSubjectList[0].courseName} - {facultyBasicSubjectList[0].coursePartDescription}
+                                    {paymentList[0].courseName} - {paymentList[0].coursePartDescription}
                                 </Text>
                             </View>
                         </View>
                     </View>
                     }
                     <FlatList
-                        data={facultyBasicSubjectList}
+                        data={paymentList}
                         keyExtractor={(item, index) => String(item.admissionReceiptID ?? index)}
                         renderItem={({ item }) => <PaymentCard item={item} />}
                         contentContainerStyle={{ paddingBottom: 20 }}
