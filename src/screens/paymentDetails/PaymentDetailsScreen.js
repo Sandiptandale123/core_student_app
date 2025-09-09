@@ -169,23 +169,22 @@ const PaymentDetailsScreen = props => {
                                 <Text numberOfLines={2} style={[styles.subjectText, { fontFamily: 'Montserrat-Bold' }]}>
                                     Student Name: {"Sandip Tandale"}
                                 </Text>
-                                <Text numberOfLines={2} style={styles.subjectText}>
+                                <Text numberOfLines={2} style={[styles.subjectText, { fontFamily: 'Montserrat-Bold' }]}>
+                                    PRN No: {"23264006"}
+                                </Text>
+                                <Text numberOfLines={2} style={[styles.subjectText, { fontFamily: 'Montserrat-Bold' }]}>
                                     {"Program Details"}
                                 </Text>
                                 <Text style={styles.subjectText}>
-                                    {"Program:-"} Bachelor of Computer Application
-                                </Text>
-                                <Text style={styles.subjectText}>
-                                    {'Semester / Part:-'} B.C.A SEM II
+                                    Bachelor of Computer Application - B.C.A SEM II
                                 </Text>
                             </View>
 
-                            <View style={styles.codeBadge}>
+                            {/* <View style={styles.codeBadge}>
                                 <Text style={styles.codeText}>{"23264006"}</Text>
-                            </View>
+                            </View> */}
                         </View>
                     </View>
-
 
                     <View style={styles.card}>
                         {/* Header */}

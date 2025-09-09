@@ -9,15 +9,12 @@ import {
   Image, Pressable
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Carousel from '../../components/Carousel/Carousel';
 import CustomHeader from '../../components/CustomHeader'; // 👈 Adjust path as needed
-import { carouselData } from '../../utils/carousel/carouselData';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const numColumns = 2;
 const screenWidth = Dimensions.get('window').width;
 const cardWidth = screenWidth / numColumns - 30;
-
 
 const Dashboard = ({ navigation }) => {
   const [studentInfo, setStudentInfo] = useState(null);
@@ -34,18 +31,9 @@ const Dashboard = ({ navigation }) => {
     };
     getUserData();
   }, []);
-  const carouselData = [
-    { image: require("../../assets/carousel1.jpg") },
-    { image: require("../../assets/faculty2.jpg") },
-    { image: require("../../assets/faculty3.jpg") }
-  ];
   const dashboardItems = [
-    // { id: '1', title: 'Class Schedule', icon: require('../../assets/class_schedule_icon.png'), color: '#1976D2' },
     { id: '1', title: 'Profile', icon: require('../../assets/icon_profile.png'), color: '#4CAF50' },
     { id: '2', title: 'Payment List', icon: require('../../assets/exam_results.png'), color: '#2196F3'  },
-    // { id: '4', title: 'Profile', icon: require('../../../assets/icon_profile.png'), color: '#2196F3' },
-    // { id: '5', title: 'Test Exam Report', icon: 'document-text-outline', color: '#FFB300' },
-    // { id: '6', title: 'LMS Report', icon: 'bar-chart-outline', color: '#009688' },
   ];
   const renderItem = ({ item }) => (
     <Pressable style={({ pressed }) => [
@@ -58,11 +46,6 @@ const Dashboard = ({ navigation }) => {
         } else if (item.id == 2) {
           navigation.navigate('PaymentListScreen', { studentInfo: studentInfo });
         }
-        // else if (item.id == 3) {
-        //   navigation.navigate('MarksEntryScreen')
-        // } else if (item.id == 4) {
-        //   navigation.navigate('ProfileScreen')
-        // }
         else {
           navigation.navigate('Home')
         }
@@ -83,9 +66,6 @@ const Dashboard = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* <View style={{ padding: 0, marginTop: 5 }}>
-        <Carousel data={carouselData} />
-      </View> */}
       <FlatList
         data={dashboardItems}
         renderItem={renderItem}

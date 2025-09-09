@@ -30,8 +30,6 @@ export function HomeStackNavigator() {
     </HomeStack.Navigator>
   );
 }
-
-
 export function AccountStackNavigator() {
   return (
     <AccountStack.Navigator>

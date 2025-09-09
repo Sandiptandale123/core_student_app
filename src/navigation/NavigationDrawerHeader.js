@@ -1,10 +1,4 @@
 import React, {useState} from 'react';
-// import {useRoute} from '@react-navigation/native';
-// import {useSelector, useDispatch} from 'react-redux';
-// import {addMultiImageAction} from '../redux/action/addImageAction';
-// import {clearGalleryImageAction} from '../redux/action/galleryAction';
-
-//Import all required component
 import {View, Image, TouchableOpacity, Text, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';

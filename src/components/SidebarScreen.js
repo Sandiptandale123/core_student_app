@@ -239,48 +239,7 @@ const SidebarScreen = (props) => {
                   </View>
                   <Text style={styles.menuText}>{item.name}</Text>
                 </View>
-                {/* {item.subList && (
-                  <View style={styles.dropdownIcon}>
-                    <Icon
-                      name={listIndex === index ? 'chevron-up' : 'chevron-down'}
-                      size={20}
-                      color="#535353"
-                    />
-                  </View>
-                )} */}
               </TouchableOpacity>
-              {/* Sub Items */}
-              {/* {listIndex === index && item.subList && (
-                <View style={styles.subList}>
-                  {item.subList.map((sub, j) => (
-                    <TouchableOpacity
-                      key={`sub-${item.id}-${j}`}
-                      style={styles.subItem}
-                      onPress={() => {
-                        // Add conditional navigation here
-                        if (sub.id === 2.1) {
-                          navigation.navigate('ClassTimeTableScreen', { studentInfo: studentInfo });
-                        }
-                        else if (sub.id === 2.2) {
-                          navigation.navigate('CourseWiseMarksEntry', { studentInfo: studentInfo });
-                        }
-                        else if (sub.id === 4.1) {
-                          navigation.navigate('MarksEntryScreen');
-                        }
-                        // Add other sub-item navigations if needed
-                      }}>
-                      <View style={[styles.subIconWrapper, { backgroundColor: sub.color }]}>
-                        <Image
-                          source={sub.icon}
-                          style={styles.subMenuIcon}
-                          resizeMode="contain"
-                        />
-                      </View>
-                      <Text style={styles.subText}>{sub.name}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              )} */}
             </View>
           ))}
         </ScrollView>
