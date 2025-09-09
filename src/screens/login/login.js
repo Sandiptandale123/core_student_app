@@ -49,11 +49,10 @@ const Login = ({ navigation }) => {
     try {
       const response = await getStudentLogin(params);
       //console.log("API Raw Response:", response);
-      console.log("printresponse",JSON.stringify(response))
+      //console.log("printresponse",JSON.stringify(response))
       if (response?.status === 200) {
         // ✅ Success case
         const studentInfo = Array.isArray(response.data) ? response.data[0] : response.data;
-
         if (!studentInfo) {
           throw new Error("Invalid API response: studentInfo missing");
         }

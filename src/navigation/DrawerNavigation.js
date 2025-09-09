@@ -26,7 +26,7 @@ export default function DrawerNavigation() {
       screenOptions={{
         gestureEnabled: false,
         drawerStyle: {
-          width: '80%',
+          width: '85%',
         },
       }}
       drawerContent={(props) => <SidebarScreen {...props} />}>

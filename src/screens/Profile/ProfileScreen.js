@@ -225,7 +225,7 @@ const ProfileScreen = props => {
         <PaperTextInput
           mode="outlined"
           label={<Text style={styles.labelText}>Father /Husband Name</Text>}
-          value={studentData?.fatherFirstName !== null ? studentData?.fatherFirstName : '-'}
+          value={studentData?.fatherName !== null ? studentData?.fatherName : '-'}
           editable={false}
           outlineColor={colors.themeColor}
           activeOutlineColor={colors.themeColor}
@@ -349,7 +349,7 @@ const ProfileScreen = props => {
         <PaperTextInput
           mode="outlined"
           label={<Text style={styles.labelText}>Caste Category</Text>}
-          value={studentData?.personalInfoII?.religionDescription}
+          value={studentData?.personalInfoII?.casteDescription !== '' ? studentData?.personalInfoII?.casteDescription : '-'}
           editable={false}
           outlineColor={colors.themeColor}
           activeOutlineColor={colors.themeColor}
@@ -459,7 +459,7 @@ const ProfileScreen = props => {
         <PaperTextInput
           mode="outlined"
           label={<Text style={styles.labelText}>Address</Text>}
-          value={studentData?.studentAddress?.studentAddress1}
+          value={studentData?.studentAddress?.studentLocalAddress}
           editable={false}
           outlineColor={colors.themeColor}
           activeOutlineColor={colors.themeColor}
@@ -475,7 +475,7 @@ const ProfileScreen = props => {
         <PaperTextInput
           mode="outlined"
           label={<Text style={styles.labelText}>State</Text>}
-          value={studentData?.studentAddress?.stateName}
+          value={studentData?.studentAddress?.localStateName !== '' ? studentData?.studentAddress?.localStateName : '-'}
           editable={false}
           outlineColor={colors.themeColor}
           activeOutlineColor={colors.themeColor}
@@ -491,7 +491,7 @@ const ProfileScreen = props => {
         <PaperTextInput
           mode="outlined"
           label={<Text style={styles.labelText}>District</Text>}
-          value={studentData?.studentAddress?.districtName !== '' ? studentData?.studentAddress?.districtName : '-'}
+          value={studentData?.studentAddress?.localDistrictName !== '' ? studentData?.studentAddress?.localDistrictName : '-'}
           editable={false}
           outlineColor={colors.themeColor}
           activeOutlineColor={colors.themeColor}
@@ -507,7 +507,7 @@ const ProfileScreen = props => {
         <PaperTextInput
           mode="outlined"
           label={<Text style={styles.labelText}>Tahsil</Text>}
-          value={studentData?.studentAddress?.tahsilName !== '' ? studentData?.studentAddress?.tahsilName : '-'}
+          value={studentData?.studentAddress?.localTahsilName !== '' ? studentData?.studentAddress?.localTahsilName : '-'}
           editable={false}
           outlineColor={colors.themeColor}
           activeOutlineColor={colors.themeColor}
@@ -542,7 +542,7 @@ const ProfileScreen = props => {
         <PaperTextInput
           mode="outlined"
           label={<Text style={styles.labelText}>Pincode</Text>}
-          value={studentData?.studentAddress?.studentPinCode !== '' ? studentData?.studentAddress?.studentPinCode : '-'}
+          value={studentData?.studentAddress?.studentLocalPincode !== '' ? studentData?.studentAddress?.studentLocalPincode : '-'}
           editable={false}
           outlineColor={colors.themeColor}
           activeOutlineColor={colors.themeColor}
@@ -719,11 +719,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
   },
-  
+
   dropdownHeaderText: {
     color: '#FFFFFF',
     fontSize: 16,
     fontFamily: 'Montserrat-Bold',
   },
-  
+
 });
