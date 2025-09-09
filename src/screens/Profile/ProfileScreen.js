@@ -599,7 +599,7 @@ const ProfileScreen = props => {
           <Icon
             name={isOpen1 ? 'chevron-up' : 'chevron-down'}
             size={24}
-            color="#FFFFFF"
+            color="#03641A"
           />
         </TouchableOpacity>
         {isOpen1 && <PersonalInfo1 />}
@@ -613,7 +613,7 @@ const ProfileScreen = props => {
           <Icon
             name={isOpen2 ? 'chevron-up' : 'chevron-down'}
             size={24}
-            color="#FFFFFF"
+            color="#03641A"
           />
         </TouchableOpacity>
         {isOpen2 && <PersonalInfo2 />}
@@ -627,7 +627,7 @@ const ProfileScreen = props => {
           <Icon
             name={isOpen3 ? 'chevron-up' : 'chevron-down'}
             size={24}
-            color="#FFFFFF"
+            color="#03641A"
           />
         </TouchableOpacity>
         {isOpen3 && <PersonalInfo3 />}
@@ -666,25 +666,21 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: colors.themeColor,
   },
-
   labelText: {
     fontSize: 16,
     fontFamily: 'Montserrat-Bold',
     color: '#000000',
   },
-
   commonPaperInput: {
     backgroundColor: '#FFFFFF',
     height: 45,
     justifyContent: 'center',
     marginBottom: 10,
   },
-
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-
   iconStyle: {
     marginLeft: 10,
     paddingLeft: 5,
@@ -708,7 +704,7 @@ const styles = StyleSheet.create({
     },
   },
   dropdownHeader: {
-    backgroundColor: colors.themeColor,
+    backgroundColor: colors.white,
     borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 10,
@@ -718,10 +714,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 10,
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOpacity: 0.5,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
   },
 
   dropdownHeaderText: {
-    color: '#FFFFFF',
+    color: '#03641A',
     fontSize: 16,
     fontFamily: 'Montserrat-Bold',
   },
