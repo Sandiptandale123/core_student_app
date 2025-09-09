@@ -45,6 +45,28 @@ const ProfileScreen = props => {
   const [isOpen2, setIsOpen2] = useState(false);
   const [isOpen3, setIsOpen3] = useState(false);
 
+  const handleToggle = (section) => {
+    setLoader(true); // Loader on
+    setTimeout(() => {
+      LayoutAnimation.easeInEaseOut();
+      if (section === 1) {
+        setIsOpen1(!isOpen1);
+        setIsOpen2(false);
+        setIsOpen3(false);
+      } else if (section === 2) {
+        setIsOpen1(false);
+        setIsOpen2(!isOpen2);
+        setIsOpen3(false);
+      } else if (section === 3) {
+        setIsOpen1(false);
+        setIsOpen2(false);
+        setIsOpen3(!isOpen3);
+      }
+      setLoader(false); // Loader off after 1 sec
+    }, 1000); // 1 second delay
+  };
+
+
   const toggleSection1 = () => {
     LayoutAnimation.easeInEaseOut();
     setIsOpen1(!isOpen1);
@@ -477,7 +499,7 @@ const ProfileScreen = props => {
 
         <TouchableOpacity
           style={styles.dropdownHeader}
-          onPress={toggleSection1}
+          onPress={() => handleToggle(1)}
         >
           <Text style={styles.dropdownHeaderText}>Personal Info 1</Text>
           <Icon
@@ -491,7 +513,7 @@ const ProfileScreen = props => {
         {/* Personal Info 2 */}
         <TouchableOpacity
           style={styles.dropdownHeader}
-          onPress={toggleSection2}
+          onPress={() => handleToggle(2)}
         >
           <Text style={styles.dropdownHeaderText}>Personal Info 2</Text>
           <Icon
@@ -505,7 +527,7 @@ const ProfileScreen = props => {
         {/* Personal Info 3 */}
         <TouchableOpacity
           style={styles.dropdownHeader}
-          onPress={toggleSection3}
+          onPress={() => handleToggle(3)}
         >
           <Text style={styles.dropdownHeaderText}>Personal Info 3</Text>
           <Icon
