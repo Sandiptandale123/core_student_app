@@ -6,10 +6,11 @@ import {
   TouchableOpacity,
   Platform,
   StatusBar,
-  Image
+  Image,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaView } from "react-native-safe-area-context";
 const CustomHeader = ({
   navigation,
   title = '',
@@ -40,36 +41,37 @@ const CustomHeader = ({
   //console.log("headerprintheaderstudentInfo", JSON.stringify(studentInfo))
 
   return (
-    <View style={styles.header}>
-      <StatusBar barStyle="light-content" backgroundColor="#336699" />
+    <SafeAreaView edges={['top']} style={{ backgroundColor: '#336699' }}>
+      <View style={styles.header}>
+        <StatusBar barStyle="light-content" backgroundColor="#336699" />
 
-      {/* Left Icon + Title */}
-      <View style={styles.leftSection}>
-        <TouchableOpacity onPress={handleLeftPress} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-          <Icon
-            name={showBack ? 'arrow-back' : 'menu'}
-            size={22}
-            color="#fff"
-          />
-          {/* <Text style={styles.title}>{'Core'}</Text> */}
-          <Text style={styles.title}>{title}</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Right Section - Username + Profile Photo */}
-      <View style={styles.rightSection}>
-        {showNotification && (
-          <TouchableOpacity style={styles.iconRight}>
-            <Icon name="notifications-outline" size={25} color="#fff" />
-            <View style={styles.redDot} />
+        {/* Left Icon + Title */}
+        <View style={styles.leftSection}>
+          <TouchableOpacity onPress={handleLeftPress} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+            <Icon
+              name={showBack ? 'arrow-back' : 'menu'}
+              size={22}
+              color="#fff"
+            />
+            {/* <Text style={styles.title}>{'Core'}</Text> */}
+            <Text style={styles.title}>{title}</Text>
           </TouchableOpacity>
-        )}
-        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-          {/* Username */}
-          {/* <Text style={styles.username}>{studentInfo?.firstName}</Text> */}
+        </View>
 
-          {/* Profile Photo */}
-          {/* <Image
+        {/* Right Section - Username + Profile Photo */}
+        <View style={styles.rightSection}>
+          {showNotification && (
+            <TouchableOpacity style={styles.iconRight}>
+              <Icon name="notifications-outline" size={25} color="#fff" />
+              <View style={styles.redDot} />
+            </TouchableOpacity>
+          )}
+          <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+            {/* Username */}
+            <Text style={styles.username}>{studentInfo?.firstName} {studentInfo?.lastName}</Text>
+
+            {/* Profile Photo */}
+            {/* <Image
       source={
         profileImage
           ? { uri: profileImage }
@@ -77,18 +79,18 @@ const CustomHeader = ({
       }
       style={styles.profileImage}
     /> */}
-          <Image
-            source={
-              studentInfo?.photoPath && studentInfo?.photoPath !== ''
-                ? { uri: studentInfo?.photoPath }
-                : require('../assets/profile_picture.png')
-            }
-            style={styles.profileImage}
-          />
+            <Image
+              source={
+                studentInfo?.photoPath && studentInfo?.photoPath !== ''
+                  ? { uri: studentInfo?.photoPath }
+                  : require('../assets/profile_picture.png')
+              }
+              style={styles.profileImage}
+            />
+          </View>
         </View>
       </View>
-    </View>
-
+    </SafeAreaView>
   );
 };
 
@@ -117,7 +119,7 @@ const styles = StyleSheet.create({
   },
   username: {
     color: "#fff",
-    fontSize: 15,
+    fontSize: 12,
     marginRight: 8,
     fontFamily: 'Montserrat-SemiBold',
   },

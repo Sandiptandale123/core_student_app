@@ -3,35 +3,38 @@ import {
   View,
   Text,
   StyleSheet,
-  TextInput,
-  TouchableOpacity,
   Image,
   SafeAreaView,
-  CheckBox,
-  Platform, Alert, Pressable, ScrollView, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback
+  Platform,
+  Pressable,
+  ScrollView,
+  KeyboardAvoidingView,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useDispatch } from 'react-redux';
 import Loader from '../../components/Loader/Loader';
 import SuccessModal from '../../components/Modals/successModel';
 import ForgotPasswordModal from '../../components/Modals/ForgotPasswordModal';
 import colors from '../../utils/colors';
-import Api from '../../utils/Api';
-import { SET_USER } from '../../redux/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getStudentLogin } from '../../utils/serviceApi';
 import { TextInput as PaperTextInput } from 'react-native-paper';
+
 const Login = ({ navigation }) => {
   const dispatch = useDispatch();
   const [showLoader, setLoader] = useState(false);
   const [showErorMsg, setErrorMsg] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [forgotModalVisible, setForgotModalVisible] = useState(false);
+
   const [studentData, setStudentData] = useState({
     prn_no: '',
     username: '',
-    password: ''
+    password: '',
   });
+
   useEffect(() => {
     setErrorMsg('');
   }, []);
@@ -48,36 +51,26 @@ const Login = ({ navigation }) => {
 
     try {
       const response = await getStudentLogin(params);
-      //console.log("API Raw Response:", response);
-      //console.log("printresponse",JSON.stringify(response))
+      //console.log('printresponse', JSON.stringify(response.data));
       if (response?.status === 200) {
-        // ✅ Success case
         const studentInfo = Array.isArray(response.data) ? response.data[0] : response.data;
-        if (!studentInfo) {
-          throw new Error("Invalid API response: studentInfo missing");
-        }
+        if (!studentInfo) throw new Error('Invalid API response: studentInfo missing');
         await AsyncStorage.setItem('studentInfo', JSON.stringify(studentInfo));
         setLoader(false);
         navigation.replace('Home');
-      }
-      else if (response?.status === 400) {
-       
-        // ✅ Failure case (No Data Found)
-        const msg = response?.data?.message || "Invalid Credentials";
+      } else if (response?.status === 400) {
+        const msg = response?.data?.message || 'Invalid Credentials';
+        setErrorMsg(msg);
+        setShowModal(true);
+        setLoader(false);
+      } else {
+        const msg = response?.data?.message || 'Invalid login response';
         setErrorMsg(msg);
         setShowModal(true);
         setLoader(false);
       }
-      else {
-        // ✅ Any other unexpected response
-        const msg = response?.data?.message || "Invalid login response";
-        setErrorMsg(msg);
-        setShowModal(true);
-        setLoader(false);
-      }
-
     } catch (error) {
-      console.log("❌ Login API Error:", error);
+      console.log('❌ Login API Error:', error);
       const errMsg = error.message || 'Something went wrong!';
       setErrorMsg(errMsg);
       setShowModal(true);
@@ -85,13 +78,11 @@ const Login = ({ navigation }) => {
     }
   };
 
-
-
-  const [forgotModalVisible, setForgotModalVisible] = useState(false);
   const closeModal = () => setShowModal(false);
+
   return (
     <>
-      {forgotModalVisible &&
+      {forgotModalVisible && (
         <ForgotPasswordModal
           showModal={forgotModalVisible}
           closeModal={() => setForgotModalVisible(false)}
@@ -99,230 +90,164 @@ const Login = ({ navigation }) => {
           content="Please contact the Administrator to reset your password."
           iconColor="red"
         />
-      }
+      )}
+
       {showLoader ? (
         <Loader visible={showLoader} />
       ) : (
-        <SafeAreaView style={styles.container}>
-          {/* Keyboard dismiss on tap outside */}
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-              <KeyboardAvoidingView
-                style={{ flex: 1 }}
-                behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-                keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+          <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+          >
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                keyboardShouldPersistTaps="handled"
+                contentContainerStyle={{ paddingHorizontal: 24, paddingTop: Platform.OS === 'android' ? 40 : 0 }}
               >
                 {/* Title */}
                 <Text style={styles.title}>Student Login</Text>
 
                 {/* Illustration */}
-                <View style={{ height: 510 }}>
-                  <Image
-                    source={require('../../assets/student_image.png')}
-                    style={styles.image}
-                    resizeMode="cover"
+                <Image
+                  source={require('../../assets/student_image.png')}
+                  style={styles.image}
+                  resizeMode="contain"
+                />
+
+                {/* Form */}
+                <View style={{ padding: 5, marginTop: 15 }}>
+                  <PaperTextInput
+                    mode="outlined"
+                    label="PRN No"
+                    value={studentData?.prn_no}
+                    outlineColor={colors.themeColor}
+                    activeOutlineColor={colors.themeColor}
+                    style={styles.commonPaperInput}
+                    theme={{
+                      ...styles.inputTheme,
+                      fonts: {
+                        ...styles.inputTheme?.fonts,
+                        bodyLarge: { fontSize: 18 },
+                      },
+                    }}
+                    placeholder="Enter PRN No"
+                    autoCapitalize="none"
+                    keyboardType="number-pad"
+                    left={<PaperTextInput.Icon icon="card-account-details" color={colors.themeColor} />}
+                    onChangeText={(value) => setStudentData({ ...studentData, prn_no: value })}
                   />
 
-                  <View style={{ padding: 5, marginTop: 15 }}>
-                    <PaperTextInput
-                      mode="outlined"
-                      label="PRN No"
-                      value={studentData?.prn_no}
-                      outlineColor={colors.themeColor}
-                      activeOutlineColor={colors.themeColor}
-                      style={styles.commonPaperInput}
-                      theme={{
-                        ...styles.inputTheme,
-                        fonts: {
-                          ...styles.inputTheme?.fonts,
-                          bodyLarge: { fontSize: 18 },
-                        },
-                      }}
-                      placeholder="Enter PRN No"
-                      autoCapitalize="none"
-                      keyboardType="number-pad"
-                      left={<PaperTextInput.Icon icon="card-account-details" color={colors.themeColor} />}
-                      onChangeText={(value) =>
-                        setStudentData({ ...studentData, prn_no: value })
-                      }
-                    />
-                    <PaperTextInput
-                      mode="outlined"
-                      label="Username"
-                      value={studentData?.username}
-                      outlineColor={colors.themeColor}
-                      activeOutlineColor={colors.themeColor}
-                      style={styles.commonPaperInput}
-                      theme={{
-                        ...styles.inputTheme,
-                        fonts: {
-                          ...styles.inputTheme?.fonts,
-                          bodyLarge: { fontSize: 18 },
-                        },
-                      }}
-                      placeholder="Enter Username"
-                      autoCapitalize="none"
-                      left={<PaperTextInput.Icon icon="account" color={colors.themeColor} />}
-                      onChangeText={(value) =>
-                        setStudentData({ ...studentData, username: value })
-                      }
-                    />
-                    <PaperTextInput
-                      mode="outlined"
-                      label="Password"
-                      value={studentData?.password}
-                      outlineColor={colors.themeColor}
-                      activeOutlineColor={colors.themeColor}
-                      style={styles.commonPaperInput}
-                      theme={{
-                        ...styles.inputTheme,
-                        fonts: {
-                          ...styles.inputTheme?.fonts,
-                          bodyLarge: { fontSize: 18 },
-                        },
-                      }}
-                      placeholder="Enter Password"
-                      secureTextEntry={!showPassword}
-                      left={<PaperTextInput.Icon icon="lock" color={colors.themeColor} />}
-                      right={
-                        <PaperTextInput.Icon
-                          icon={showPassword ? "eye" : "eye-off"}
-                          onPress={() => setShowPassword((prev) => !prev)}
-                        />
-                      }
-                      onChangeText={(value) =>
-                        setStudentData({ ...studentData, password: value })
-                      }
-                    />
-                    <View style={styles.optionsRow}>
-                      <Pressable
-                        onPress={() => setForgotModalVisible(true)}
-                        style={({ pressed }) => [pressed && { opacity: 0.6 }]}
-                      >
-                        <Text style={styles.forgotText}>Forgot Password?</Text>
-                      </Pressable>
-                    </View>
+                  <PaperTextInput
+                    mode="outlined"
+                    label="Username"
+                    value={studentData?.username}
+                    outlineColor={colors.themeColor}
+                    activeOutlineColor={colors.themeColor}
+                    style={styles.commonPaperInput}
+                    theme={{
+                      ...styles.inputTheme,
+                      fonts: {
+                        ...styles.inputTheme?.fonts,
+                        bodyLarge: { fontSize: 18 },
+                      },
+                    }}
+                    placeholder="Enter Username"
+                    autoCapitalize="none"
+                    left={<PaperTextInput.Icon icon="account" color={colors.themeColor} />}
+                    onChangeText={(value) => setStudentData({ ...studentData, username: value })}
+                  />
 
-                    {showModal && showErorMsg !== '' && (
-                      <SuccessModal showModal={showModal} closeModal={closeModal} message={showErorMsg} />
-                    )}
+                  <PaperTextInput
+                    mode="outlined"
+                    label="Password"
+                    value={studentData?.password}
+                    outlineColor={colors.themeColor}
+                    activeOutlineColor={colors.themeColor}
+                    style={styles.commonPaperInput}
+                    theme={{
+                      ...styles.inputTheme,
+                      fonts: {
+                        ...styles.inputTheme?.fonts,
+                        bodyLarge: { fontSize: 18 },
+                      },
+                    }}
+                    placeholder="Enter Password"
+                    autoCapitalize="none"
+                    secureTextEntry={!showPassword}
+                    left={<PaperTextInput.Icon icon="lock" color={colors.themeColor} />}
+                    right={
+                      <PaperTextInput.Icon
+                        icon={showPassword ? 'eye' : 'eye-off'}
+                        onPress={() => setShowPassword((prev) => !prev)}
+                      />
+                    }
+                    onChangeText={(value) => setStudentData({ ...studentData, password: value })}
+                  />
 
-                    {/* Login Button */}
+                  <View style={styles.optionsRow}>
                     <Pressable
-                      style={({ pressed }) => [
-                        styles.loginButton,
-                        pressed && { opacity: 0.6 },
-                      ]}
-                      onPress={() => {
-                        if (!studentData.prn_no || !studentData.username || !studentData.password) {
-                          setErrorMsg('Please Enter Username and Password!');
-                          setShowModal(true);
-                        } else {
-                          loginApi(studentData);
-                        }
-                      }}
+                      onPress={() => setForgotModalVisible(true)}
+                      style={({ pressed }) => [pressed && { opacity: 0.6 }]}
                     >
-                      <Text style={styles.loginText}>Login</Text>
+                      <Text style={styles.forgotText}>Forgot Password?</Text>
                     </Pressable>
                   </View>
+
+                  {showModal && showErorMsg !== '' && (
+                    <SuccessModal showModal={showModal} closeModal={closeModal} message={showErorMsg} />
+                  )}
+
+                  {/* Login Button */}
+                  <Pressable
+                    style={({ pressed }) => [styles.loginButton, pressed && { opacity: 0.6 }]}
+                    onPress={() => {
+                      if (!studentData.prn_no || !studentData.username || !studentData.password) {
+                        setErrorMsg('Please Enter Username and Password!');
+                        setShowModal(true);
+                      } else {
+                        loginApi(studentData);
+                      }
+                    }}
+                  >
+                    <Text style={styles.loginText}>Login</Text>
+                  </Pressable>
                 </View>
-              </KeyboardAvoidingView>
+              </ScrollView>
             </TouchableWithoutFeedback>
-          </ScrollView>
+          </KeyboardAvoidingView>
         </SafeAreaView>
       )}
     </>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    paddingHorizontal: 24,
-    paddingTop: Platform.OS === 'android' ? 40 : 0,
+   backgroundColor: '#fff',
+  paddingHorizontal: 24,
+  paddingTop: Platform.OS === 'android' ? 40 : 0,
   },
   title: {
     fontSize: 30,
     fontFamily: 'Montserrat-Bold',
     color: '#336699',
-    height: 44,
     textAlign: 'center',
     marginVertical: 10,
   },
   image: {
-    width: 220,
+    width: '80%',
     height: 200,
     alignSelf: 'center',
-  },
-  inputContainer: {
-    marginBottom: 12,
-  },
-  passwordWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 0.5,
-    borderColor: '#000',
-    borderRadius: 10,
-    height: 50,
-    paddingHorizontal: 12,
-    backgroundColor: '#FFFFFF',
-    justifyContent: 'space-between'
-  },
-  passwordInput: {
-    flex: 1,
-    fontSize: 18,
-    paddingRight: 10,
-    height: 50,
-    color: colors.black,
-  },
-  label: {
-    fontSize: 18,
-    fontFamily: 'Montserrat-SemiBold',
-    color: '#000000',
-    marginBottom: 6,
-    height: 30
-  },
-  input: {
-    borderWidth: 0.5,
-    borderColor: '#000',
-    borderRadius: 10,
-    height: 50,
-    padding: 12,
-    fontSize: 18,
-    backgroundColor: '#FFFFFF',
-    color: colors.black,
-    width: '100%'
   },
   optionsRow: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
     marginVertical: 12,
-  },
-  checkboxRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  checkbox: {
-    width: 15,
-    height: 15,
-    borderRadius: 1,
-    borderWidth: 1,
-    borderColor: '#063057',
-    marginRight: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  checkboxTick: {
-    width: 10,
-    height: 10,
-    backgroundColor: '#0A9EDC',
-  },
-  rememberText: {
-    fontSize: 12,
-    color: '#000000',
-    fontFamily: 'Montserrat-Medium',
   },
   forgotText: {
     fontSize: 15,
@@ -331,28 +256,18 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     backgroundColor: '#336699',
-    borderColor: '#336699',
-    borderWidth: 1,
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
     marginTop: 20,
     width: '70%',
-    height: 50
+    height: 50,
   },
   loginText: {
     color: '#FFFFFF',
     fontSize: 20,
     fontFamily: 'Montserrat-Medium',
-    textAlign: 'center'
-  },
-  errorText: {
-    color: 'red',
-    fontSize: 14,
-    textAlign: 'center',
-    marginBottom: 10,
-    fontFamily: 'Montserrat-SemiBold'
   },
   commonPaperInput: {
     backgroundColor: '#FFFFFF',
@@ -367,27 +282,6 @@ const styles = StyleSheet.create({
       text: colors.black,
       placeholder: '#999',
     },
-  },
-  inputText: {
-    flex: 1,
-    paddingLeft: 35,
-    fontSize: 14,
-    color: '#000',
-    fontFamily: 'Montserrat-Medium',
-    height: 50,
-  },
-  labelText: {
-    fontSize: 20,
-    fontFamily: 'Montserrat-Bold',
-    color: '#000000',
-  },
-  iconStyle: {
-    marginLeft: 10,
-    paddingLeft: 5,
-  },
-  inputWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
   },
 });
 

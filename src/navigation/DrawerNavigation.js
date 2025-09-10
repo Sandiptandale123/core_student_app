@@ -11,7 +11,7 @@ export default function DrawerNavigation() {
       screenOptions={{
         gestureEnabled: false,
         drawerStyle: {
-          width: '85%',
+          width: '82%',
         },
       }}
       drawerContent={(props) => <SidebarScreen {...props} />}>
@@ -19,7 +19,7 @@ export default function DrawerNavigation() {
         header: () => (
           <CustomHeader
             navigation={navigation}
-            title="Core Student App"
+            title="Student App"
             showNotification={false}
           />
         ),

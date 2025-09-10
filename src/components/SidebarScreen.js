@@ -5,13 +5,13 @@ import {
   StyleSheet,
   TextInput,
   StatusBar,
-  SafeAreaView, ScrollView,
+  ScrollView,
   Alert,
   TouchableOpacity,
   Image,
   TouchableHighlight,
 } from 'react-native';
-
+import { SafeAreaView } from "react-native-safe-area-context";
 //import {UserAction} from '../../reduxManager';
 import { useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -187,7 +187,7 @@ const SidebarScreen = (props) => {
         onConfirm={handleLogout}
       />
       <StatusBar barStyle="dark-content" />
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#fff', borderTopRightRadius: 20, borderBottomRightRadius: 20 }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#fff', borderTopRightRadius: 25, borderBottomRightRadius: 25 ,}}>
         {/* Close Button */}
         <TouchableOpacity
           style={styles.closeBtn}

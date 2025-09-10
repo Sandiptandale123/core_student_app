@@ -11,7 +11,7 @@ import {
 } from './NavigationOptions';
 import SplashScreen from '../screens/splashscreen/SplashScreen';
 import Login from '../screens/login/login';
-import ProfileScreen from '../screens/Profile/ProfileScreen';
+import ProfileScreen from '../screens/Profile/ProfileScreen1';
 import CustomHeader from '../components/CustomHeader';
 import PaymentListScreen from '../screens/payment/PaymentListScreen';
 import PaymentDetailsScreen from '../screens/paymentDetails/PaymentDetailsScreen';
