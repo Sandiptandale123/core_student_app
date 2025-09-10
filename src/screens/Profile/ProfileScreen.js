@@ -141,7 +141,7 @@ const ProfileScreen = props => {
         <PaperTextInput
           mode="outlined"
           label={<Text style={styles.labelText}>Full Name</Text>}
-          value={studentData?.studentName}
+          value={studentData?.studentName !== '' ? studentData?.studentName : '-'}
           editable={false}
           outlineColor={colors.themeColor}
           activeOutlineColor={colors.themeColor}
@@ -173,7 +173,7 @@ const ProfileScreen = props => {
         <PaperTextInput
           mode="outlined"
           label={<Text style={styles.labelText}>Mother Name</Text>}
-          value={studentData?.studentMothersName}
+          value={studentData?.studentMothersName !== '' ? studentData?.studentMothersName : '-'}
           editable={false}
           outlineColor={colors.themeColor}
           activeOutlineColor={colors.themeColor}
@@ -190,7 +190,7 @@ const ProfileScreen = props => {
         <PaperTextInput
           mode="outlined"
           label={<Text style={styles.labelText}>Gender</Text>}
-          value={studentData?.gender}
+          value={studentData?.gender !== '' ? studentData?.gender : '-'}
           editable={false}
           outlineColor={colors.themeColor}
           activeOutlineColor={colors.themeColor}
@@ -208,7 +208,7 @@ const ProfileScreen = props => {
         <PaperTextInput
           mode="outlined"
           label={<Text style={styles.labelText}>Mobile No</Text>}
-          value={studentData?.studentMobileNo}
+          value={studentData?.studentMobileNo !== '' ? studentData?.studentMobileNo : '-'}
           editable={false}
           outlineColor={colors.themeColor}
           activeOutlineColor={colors.themeColor}
@@ -226,7 +226,7 @@ const ProfileScreen = props => {
         <PaperTextInput
           mode="outlined"
           label={<Text style={styles.labelText}>Email</Text>}
-          value={studentData?.studentMailID}
+          value={studentData?.studentMailID !== '' ? studentData?.studentMailID : '-'}
           editable={false}
           outlineColor={colors.themeColor}
           activeOutlineColor={colors.themeColor}
@@ -249,7 +249,7 @@ const ProfileScreen = props => {
         <PaperTextInput
           mode="outlined"
           label={<Text style={styles.labelText}>Religion</Text>}
-          value={studentData?.personalInfoII?.religionDescription}
+          value={studentData?.personalInfoII?.religionDescription !== '' ? studentData?.personalInfoII?.religionDescription : '-'}
           editable={false}
           outlineColor={colors.themeColor}
           activeOutlineColor={colors.themeColor}
@@ -265,7 +265,7 @@ const ProfileScreen = props => {
         <PaperTextInput
           mode="outlined"
           label={<Text style={styles.labelText}>Caste</Text>}
-          value={studentData?.personalInfoII?.reservationCategoryName}
+          value={studentData?.personalInfoII?.reservationCategoryName !== '' ? studentData?.personalInfoII?.reservationCategoryName : '-'}
           editable={false}
           outlineColor={colors.themeColor}
           activeOutlineColor={colors.themeColor}
@@ -332,7 +332,7 @@ const ProfileScreen = props => {
         <PaperTextInput
           mode="outlined"
           label={<Text style={styles.labelText}>Physical Disability</Text>}
-          value={studentData?.personalInfoII?.physicalDisabilityName}
+          value={studentData?.personalInfoII?.physicalDisabilityName !== '' ? studentData?.personalInfoII?.physicalDisabilityName : '-'}
           editable={false}
           outlineColor={colors.themeColor}
           activeOutlineColor={colors.themeColor}
@@ -350,7 +350,7 @@ const ProfileScreen = props => {
         <PaperTextInput
           mode="outlined"
           label={<Text style={styles.labelText}>Aadhar No</Text>}
-          value={studentData?.personalInfoII?.aadharNoID}
+          value={studentData?.personalInfoII?.aadharNoID !== '' ? studentData?.personalInfoII?.aadharNoID : '-'}
           editable={false}
           outlineColor={colors.themeColor}
           activeOutlineColor={colors.themeColor}
@@ -368,7 +368,7 @@ const ProfileScreen = props => {
         <PaperTextInput
           mode="outlined"
           label={<Text style={styles.labelText}>ABC ID</Text>}
-          value={studentData?.personalInfoII?.abcid}
+          value={studentData?.personalInfoII?.abcid !== '' ? studentData?.personalInfoII?.abcid : '-'}
           editable={false}
           outlineColor={colors.themeColor}
           activeOutlineColor={colors.themeColor}
@@ -391,7 +391,7 @@ const ProfileScreen = props => {
         <PaperTextInput
           mode="outlined"
           label={<Text style={styles.labelText}>Address</Text>}
-          value={studentData?.studentAddress?.studentLocalAddress}
+          value={studentData?.studentAddress?.studentLocalAddress !== '' ? studentData?.studentAddress?.studentLocalAddress : '-'}
           editable={false}
           outlineColor={colors.themeColor}
           activeOutlineColor={colors.themeColor}
