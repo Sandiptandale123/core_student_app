@@ -21,7 +21,7 @@ const PaymentListScreen = props => {
         try {
             setErrorMsg('');
             if (!studentInfo?.studentID) {
-                setErrorMsg('Please Enter Username and Password!');
+                setErrorMsg('Student ID Not Found!');
                 return;
             }
 

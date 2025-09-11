@@ -18,7 +18,7 @@ const PaymentDetailsScreen = props => {
         try {
             setErrorMsg('');
             if (!studentInfo?.studentID) {
-                setErrorMsg('Please Enter Username and Password!');
+                setErrorMsg('Student ID Not Found!');
                 return;
             }
             setLoader(true);
@@ -46,7 +46,7 @@ const PaymentDetailsScreen = props => {
             setLoader(false);
             console.error("API Error:", error);
             setErrorMsg(error?.response?.data?.message || "Failed to fetch data");
-        } 
+        }
     };
 
     return (
@@ -92,25 +92,32 @@ const PaymentDetailsScreen = props => {
                         {/* Body */}
                         <View style={styles.body}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
+                                <Text style={styles.label}>Receipt No</Text>
+                                <Text numberOfLines={1} style={styles.value}>{item?.receiptNo}</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
+                                <Text style={styles.label}>Receipt Date</Text>
+                                <Text numberOfLines={1} style={styles.value}>{moment(item?.receiptDate).format('DD-MMM-YYYY')}</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
                                 <Text style={styles.label}>Receipt Amount</Text>
                                 <Text numberOfLines={1} style={styles.value}>Rs.{paymentDetailsData?.totalAmount}</Text>
+                            </View>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
+                                <Text style={styles.label}>Payment Mode</Text>
+                                <Text numberOfLines={1} style={styles.value}>{paymentDetailsData?.strPaymentMode}</Text>
                             </View>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
                                 <Text style={styles.label}>Transaction No</Text>
                                 <Text numberOfLines={1} style={styles.value}>{paymentDetailsData?.txnID}</Text>
                             </View>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
-                                <Text style={styles.label}>Transaction Date</Text>
-                                <Text numberOfLines={1} style={styles.value}>{moment(paymentDetailsData?.onlinePaymentConfirmDate).format('DD-MMM-YYYY')}</Text>
-                            </View>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
                                 <Text style={styles.label}>Bank Referenece No</Text>
                                 <Text numberOfLines={1} style={styles.value}>{paymentDetailsData?.bankRefereneceNo}</Text>
                             </View>
-
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
-                                <Text style={styles.label}>Payment Mode</Text>
-                                <Text numberOfLines={1} style={styles.value}>{paymentDetailsData?.strPaymentMode}</Text>
+                                <Text style={styles.label}>Fees Paying Category</Text>
+                                <Text numberOfLines={1} style={styles.value}>{paymentDetailsData?.feesPayCategoryName}</Text>
                             </View>
                         </View>
                     </View>
@@ -119,7 +126,7 @@ const PaymentDetailsScreen = props => {
                             styles.button,
                             { backgroundColor: '#025B8D' },
                         ]}
-                        onPress={() =>  navigation.goBack()}
+                        onPress={() => navigation.goBack()}
                     >
                         <Text style={styles.buttonText}>{'Back'}</Text>
                     </TouchableOpacity>
@@ -176,7 +183,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#4F4F4F',
         fontFamily: 'Montserrat-Medium',
-        flex: 0.8,
+        flex: 0.9,
     },
     value: {
         fontSize: 14,
