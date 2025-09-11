@@ -91,33 +91,33 @@ const PaymentDetailsScreen = props => {
 
                         {/* Body */}
                         <View style={styles.body}>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
+                            <View style={styles.bodyView}>
                                 <Text style={styles.label}>Receipt No</Text>
-                                <Text numberOfLines={1} style={styles.value}>{item?.receiptNo}</Text>
+                                <Text numberOfLines={1} style={styles.value}>{item?.receiptNo !== '' ? item?.receiptNo : '-'}</Text>
                             </View>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
+                            <View style={styles.bodyView}>
                                 <Text style={styles.label}>Receipt Date</Text>
                                 <Text numberOfLines={1} style={styles.value}>{moment(item?.receiptDate).format('DD-MMM-YYYY')}</Text>
                             </View>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
+                            <View style={styles.bodyView}>
                                 <Text style={styles.label}>Receipt Amount</Text>
-                                <Text numberOfLines={1} style={styles.value}>Rs.{paymentDetailsData?.totalAmount}</Text>
+                                <Text numberOfLines={1} style={styles.value}>Rs.{paymentDetailsData?.totalAmount !== '' ? paymentDetailsData?.totalAmount : '0'}</Text>
                             </View>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
+                            <View style={styles.bodyView}>
                                 <Text style={styles.label}>Payment Mode</Text>
-                                <Text numberOfLines={1} style={styles.value}>{paymentDetailsData?.strPaymentMode}</Text>
+                                <Text numberOfLines={1} style={styles.value}>{paymentDetailsData?.strPaymentMode !== '' ? paymentDetailsData?.strPaymentMode : ''}</Text>
                             </View>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
+                            <View style={styles.bodyView}>
                                 <Text style={styles.label}>Transaction No</Text>
-                                <Text numberOfLines={1} style={styles.value}>{paymentDetailsData?.txnID}</Text>
+                                <Text numberOfLines={1} style={styles.value}>{paymentDetailsData?.txnID !== '' ? paymentDetailsData?.txnID : ''}</Text>
                             </View>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
+                            <View style={styles.bodyView}>
                                 <Text style={styles.label}>Bank Referenece No</Text>
-                                <Text numberOfLines={1} style={styles.value}>{paymentDetailsData?.bankRefereneceNo}</Text>
+                                <Text numberOfLines={1} style={styles.value}>{paymentDetailsData?.bankRefereneceNo !== '' ? paymentDetailsData?.bankRefereneceNo : ''}</Text>
                             </View>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
+                            <View style={styles.bodyView}>
                                 <Text style={styles.label}>Fees Paying Category</Text>
-                                <Text numberOfLines={1} style={styles.value}>{paymentDetailsData?.feesPayCategoryName}</Text>
+                                <Text numberOfLines={1} style={styles.value}>{paymentDetailsData?.feesPayCategoryName !== '' ? paymentDetailsData?.feesPayCategoryName : ''}</Text>
                             </View>
                         </View>
                     </View>
@@ -179,6 +179,7 @@ const styles = StyleSheet.create({
     body: {
         marginVertical: 5,
     },
+    bodyView: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 },
     label: {
         fontSize: 14,
         color: '#4F4F4F',
