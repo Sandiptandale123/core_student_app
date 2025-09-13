@@ -68,13 +68,13 @@ const ClassTimetableScreen = props => {
                 AcademicInstanceID: studentInfo?.academicInstanceID,
                 ExamInstanceID: studentInfo?.examInstanceID,
             };
-            console.log("printparams", JSON.stringify(params))
+            //console.log("printparams", JSON.stringify(params))
             const response = await Api.getApi(
                 'PreDivisionTimeTable/GetClassTimeTableListForStudentID',
                 params
             );
             setLoader(false);
-            console.log("classtimetableAPI Response:", JSON.stringify(response?.data));
+            //console.log("classtimetableAPI Response:", JSON.stringify(response?.data));
 
             if (response?.status === 200) {
                 setClassTimeTableList(response.data || []);
