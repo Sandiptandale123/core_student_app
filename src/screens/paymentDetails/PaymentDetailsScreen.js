@@ -240,4 +240,11 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontFamily: 'Montserrat-Bold',
     },
+    errorText: {
+        color: 'red',
+        fontSize: 14,
+        textAlign: 'center',
+        marginBottom: 10,
+        fontFamily: 'Montserrat-Bold'
+    },
 });

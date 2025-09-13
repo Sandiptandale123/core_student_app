@@ -33,7 +33,8 @@ const Dashboard = ({ navigation }) => {
   }, []);
   const dashboardItems = [
     { id: '1', title: 'Profile', icon: require('../../assets/icon_profile.png'), color: '#4CAF50' },
-    { id: '2', title: 'Payment List', icon: require('../../assets/exam_results.png'), color: '#2196F3'  },
+    { id: '2', title: 'Payment List', icon: require('../../assets/exam_results.png'), color: '#2196F3' },
+    { id: '3', title: 'Class Timetable', icon: require('../../assets/class_schedule_icon.png'), color: '#9C27B0' },
   ];
   const renderItem = ({ item }) => (
     <Pressable style={({ pressed }) => [
@@ -45,6 +46,8 @@ const Dashboard = ({ navigation }) => {
           navigation.navigate('ProfileScreen', { studentInfo: studentInfo });
         } else if (item.id == 2) {
           navigation.navigate('PaymentListScreen', { studentInfo: studentInfo });
+        } else if (item.id == 3) {
+          navigation.navigate('ClassTimetableScreen', { studentInfo: studentInfo });
         }
         else {
           navigation.navigate('Home')

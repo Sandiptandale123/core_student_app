@@ -6,87 +6,20 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
-  ScrollView, PermissionsAndroid, Platform, Alert, UIManager, LayoutAnimation
+  ScrollView,  Alert,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import colors from '../../utils/colors';
 import moment from 'moment';
 import Api from '../../utils/Api';
 import Loader from '../../components/Loader/Loader';
 import { TextInput as PaperTextInput } from 'react-native-paper';
-// Android me smooth animation ke liye
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
 const ProfileScreen = props => {
   const { navigation } = props;
   const { studentInfo } = props.route.params
   //console.log("ProfileScreenprintuserdata", JSON.stringify(studentInfo))
-  const [fullName, setFullName] = useState('');
-  const [profileImage, setProfileImage] = useState(studentInfo?.photoPath);
-  const [gender, setGender] = useState('');
-  const [selectTab, setSelectTab] = useState(1)
-  // Inside your component:
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [address, setAddress] = useState('');
   const [showLoader, setLoader] = useState(false);
-  // Instead of string, use Date object
-  const [dob, setDob] = useState(null);
-  const [dobText, setDobText] = useState(''); // display purpose
   const [studentData, setStudentData] = useState(null)
   const [showErorMsg, setErrorMsg] = useState('');
-  const [inputHeight, setInputHeight] = useState(45);
-
-  // Dropdown states for each section
-  const [isOpen1, setIsOpen1] = useState(true);
-  const [isOpen2, setIsOpen2] = useState(false);
-  const [isOpen3, setIsOpen3] = useState(false);
-
-  const handleToggle = (section) => {
-    setLoader(true); // Loader on
-    setTimeout(() => {
-      LayoutAnimation.easeInEaseOut();
-      if (section === 1) {
-        setIsOpen1(!isOpen1);
-        setIsOpen2(false);
-        setIsOpen3(false);
-      } else if (section === 2) {
-        setIsOpen1(false);
-        setIsOpen2(!isOpen2);
-        setIsOpen3(false);
-      } else if (section === 3) {
-        setIsOpen1(false);
-        setIsOpen2(false);
-        setIsOpen3(!isOpen3);
-      }
-      setLoader(false); // Loader off after 1 sec
-    }, 1000); // 1 second delay
-  };
-
-
-  const toggleSection1 = () => {
-    LayoutAnimation.easeInEaseOut();
-    setIsOpen1(!isOpen1);
-    setIsOpen2(false);
-    setIsOpen3(false);
-  };
-
-  const toggleSection2 = () => {
-    LayoutAnimation.easeInEaseOut();
-    setIsOpen1(false);
-    setIsOpen2(!isOpen2);
-    setIsOpen3(false);
-  };
-
-  const toggleSection3 = () => {
-    LayoutAnimation.easeInEaseOut();
-    setIsOpen1(false);
-    setIsOpen2(false);
-    setIsOpen3(!isOpen3);
-  };
 
   useEffect(() => {
     studentProfileApi();
@@ -97,18 +30,12 @@ const ProfileScreen = props => {
       setLoader(true);
       const params = {
         StudentID: studentInfo.studentID,
-        //DatabaseName: studentInfo.databaseName
-        // UserName: 'aabhondwe',
-        // Password: '123456789'
       };
       Api.getApi('StudentProfile/GetStudentProfileDetailsList', params)
         .then(response => {
           if (response.status === 200) {
-            //console.log("print response && response.data[0]", JSON.stringify(response.data[0]))
             setLoader(false);
-            //dispatch({ type: SET_USER, payload: response.data[0] });
             setStudentData(response.data[0])
-            //timeout();
           } else {
             Alert(response.data.message);
             setLoader(false);
@@ -383,7 +310,7 @@ const ProfileScreen = props => {
       {showLoader ? (
         <Loader visible={showLoader} />
       ) : (<ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        {isOpen1 && <PersonalInfo1 />}
+        {<PersonalInfo1 />}
         {showErorMsg !== '' && (
           <Text style={styles.errorText}>{showErorMsg}</Text>
         )}
@@ -475,5 +402,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Montserrat-Bold',
   },
-
+  errorText: {
+    color: 'red',
+    fontSize: 14,
+    textAlign: 'center',
+    marginBottom: 10,
+    fontFamily: 'Montserrat-Bold'
+},
 });

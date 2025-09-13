@@ -24,13 +24,6 @@ import { RESET_USER } from '../redux/types';
 const SidebarScreen = (props) => {
   const { navigation } = props;
   const dispatch = useDispatch();
-  //console.log("printuserdata",JSON.stringify(props))
-  // console.log(
-  //   props.userInfo,
-  //   'props.userInfoprops.userInfoprops.userInfodrawer',
-  // );
-  // const studentInfo = useSelector(state => state.userState?.studentInfo);
-  // console.log(JSON.stringify(studentInfo), "sidebar.studentInfo")
   const [studentInfo, setStudentInfo] = useState(null);
   useEffect(() => {
     const getUserData = async () => {
@@ -46,12 +39,6 @@ const SidebarScreen = (props) => {
 
     getUserData();
   }, []);
-  //console.log(JSON.stringify(studentInfo), "sidebar.studentInfo")
-  const clearStorage = () => {
-    //UserAction.resetUserDetails();
-    navigation.navigate('SplashScreen');
-  };
-
   const menuList = [
     {
       name: 'Profile',
@@ -65,79 +52,18 @@ const SidebarScreen = (props) => {
       icon: require('../assets/exam_results.png'),
       color: '#3F8DE8',
     },
-    // {
-    //   name: 'Marks Entry',
-    //   id: 3,
-    //   icon: require('../assets/attendance_icon.png'),
-    //   color: '#9C27B0'
-    // },
+    {
+      name: 'Class Timetable',
+      id: 3,
+      icon: require('../assets/class_schedule_icon.png'),
+      color: '#9C27B0',
+    },
     {
       name: 'Password',
-      id: 3,
+      id: 4,
       icon: require('../assets/password_icon.png'),
       color: '#5EC878',
     },
-    // {
-    //   name: 'Class Admin',
-    //   id: 2,
-    //   icon: require('../assets/class_admin_icon.png'),
-    //   color: '#B782FF',
-    //   subList: [
-    //     {
-    //       name: 'Class Time Table',
-    //       id: 2.1,
-    //       icon: require('../assets/class_schedule_icon.png'),
-    //       color: '#1976D2'
-    //     },
-    //     {
-    //       name: 'Class Attendance Entry',
-    //       id: 2.2,
-    //       icon: require('../assets/attendance_icon.png'),
-    //       color: '#4CAF50'
-    //     }
-    //   ],
-    // },
-    // {
-    //   name: 'Leave',
-    //   id: 3,
-    //   icon: require('../assets/leave_icon.png'),
-    //   color: '#3F8DE8',
-    //   subList: [
-    //     {
-    //       name: 'Leave Application',
-    //       id: 3.1,
-    //       icon: require('../assets/leave.png'),
-    //       color: '#1976D2'
-    //     },
-    //     {
-    //       name: 'Leave Approval',
-    //       id: 3.2,
-    //       icon: require('../assets/approval.png'),
-    //       color: '#4CAF50'
-    //     }
-    //   ],
-    // },
-    // {
-    //   name: 'Examination',
-    //   id: 4,
-    //   icon: require('../assets/examination_icon.png'),
-    //   color: '#FFB936',
-    //   subList: [
-    //     {
-    //       name: 'Course Wise Methods Marks Entry',
-    //       id: 4.1,
-    //       icon: require('../assets/student_grades.png'),
-    //       color: '#1976D2'
-    //     },
-    //     {
-    //       name: 'Course Wise Result Details',
-    //       id: 4.2,
-    //       icon: require('../assets/exam_results.png'),
-    //       color: '#9C27B0'
-    //     }
-    //   ],
-    // },
-
   ];
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
@@ -155,20 +81,6 @@ const SidebarScreen = (props) => {
       setShowLogoutModal(false);
     }
   };
-
-  const createTwoButtonAlert = () =>
-    Alert.alert('Logout', 'Are you sure to logout', [
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      {
-        text: 'OK',
-        onPress: () => clearStorage(),
-      },
-    ]);
-  const [listIndex, setIndex] = useState(-1);
   const [forgotModalVisible, setForgotModalVisible] = useState(false);
   return (
     <>
@@ -187,7 +99,7 @@ const SidebarScreen = (props) => {
         onConfirm={handleLogout}
       />
       <StatusBar barStyle="dark-content" />
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#fff', borderTopRightRadius: 25, borderBottomRightRadius: 25 ,}}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#fff', borderTopRightRadius: 25, borderBottomRightRadius: 25, }}>
         {/* Close Button */}
         <TouchableOpacity
           style={styles.closeBtn}
@@ -230,6 +142,8 @@ const SidebarScreen = (props) => {
                   } else if (item.id === 2) {
                     navigation.navigate('PaymentListScreen', { studentInfo: studentInfo });
                   } else if (item.id === 3) {
+                    navigation.navigate('ClassTimetableScreen', { studentInfo: studentInfo });
+                  } else if (item.id === 4) {
                     setForgotModalVisible(true)
                   }
                 }}>
