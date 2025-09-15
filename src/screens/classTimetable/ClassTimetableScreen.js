@@ -10,7 +10,7 @@ import moment from 'moment';
 const ClassTimetableScreen = props => {
     const { navigation } = props;
     const { studentInfo } = props.route.params;
-    console.log("printstudentinfo", JSON.stringify(studentInfo))
+    //console.log("printstudentinfo", JSON.stringify(studentInfo))
     const [classTimeTableList, setClassTimeTableList] = useState(null);
     const [showErorMsg, setErrorMsg] = useState('');
     const [showLoader, setLoader] = useState(false);
