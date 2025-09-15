@@ -10,6 +10,7 @@ import moment from 'moment';
 const ClassTimetableScreen = props => {
     const { navigation } = props;
     const { studentInfo } = props.route.params;
+    console.log("printstudentinfo", JSON.stringify(studentInfo))
     const [classTimeTableList, setClassTimeTableList] = useState(null);
     const [showErorMsg, setErrorMsg] = useState('');
     const [showLoader, setLoader] = useState(false);
@@ -96,7 +97,7 @@ const ClassTimetableScreen = props => {
             >
                 <View style={styles.row}>
                     <Text style={styles.label}>Day</Text>
-                    <Text numberOfLines={2} style={styles.value}>-</Text>
+                    <Text numberOfLines={2} style={styles.value}>{item.dayName}</Text>
                 </View>
                 <View style={styles.row}>
                     <Text style={styles.label}>Slot Time</Text>
@@ -113,6 +114,10 @@ const ClassTimetableScreen = props => {
                 <View style={styles.row}>
                     <Text style={[styles.label,]}>Course</Text>
                     <Text numberOfLines={2} style={styles.value}>{item?.subjectName}</Text>
+                </View>
+                <View style={styles.row}>
+                    <Text style={[styles.label,]}>Course Code</Text>
+                    <Text numberOfLines={2} style={styles.value}>{item?.subjectUniversityCode}</Text>
                 </View>
                 <View style={styles.row}>
                     <Text style={styles.label}>Teacher</Text>
@@ -137,14 +142,22 @@ const ClassTimetableScreen = props => {
                         <View style={styles.cardRow}>
                             <View style={{ flex: 1, paddingRight: 10 }}>
                                 <Text numberOfLines={2} style={[styles.subjectText, { fontFamily: 'Montserrat-Bold' }]}>
+                                    Student Name: {studentInfo?.firstName} {studentInfo?.middleName} {studentInfo?.lastName}
+                                </Text>
+                                <Text numberOfLines={2} style={[styles.subjectText, { fontFamily: 'Montserrat-Bold' }]}>
+                                    PRN No: {studentInfo?.prnno}
+                                </Text>
+                                <Text numberOfLines={2} style={[styles.subjectText, { fontFamily: 'Montserrat-Bold' }]}>
                                     Program: {classTimeTableList[0].courseName}
                                 </Text>
-                                <Text style={styles.subjectText}>
-                                    Sem/Part: {classTimeTableList[0].coursePartDescription}
-                                </Text>
-                                <Text style={styles.subjectText}>
-                                    Division: {classTimeTableList[0].divisionName}
-                                </Text>
+                                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+                                    <Text style={[styles.subjectText, { fontFamily: 'Montserrat-Bold', flex: 1 }]}>
+                                        Sem/Part: {classTimeTableList[0].coursePartDescription}
+                                    </Text>
+                                    <Text style={[styles.subjectText, { fontFamily: 'Montserrat-Bold', flex: 1 }]}>
+                                        Division: {classTimeTableList[0].divisionName}
+                                    </Text>
+                                </View>
                             </View>
                         </View>
                     </View>
