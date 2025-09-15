@@ -205,7 +205,7 @@ const ClassTimetableScreen = props => {
 
                     <FlatList
                         data={classTimeTableList}
-                        keyExtractor={(item, index) => String(item.subjectID ?? index)}
+                        keyExtractor={(item, index) => String(item.subjectID) + '_' + index}
                         renderItem={({ item }) => <ClassTimeTableCard item={item} />}
                         contentContainerStyle={{ paddingBottom: 20, flexGrow: 1 }}
                         ListEmptyComponent={() => (
