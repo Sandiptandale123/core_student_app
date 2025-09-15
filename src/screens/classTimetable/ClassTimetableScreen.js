@@ -62,8 +62,7 @@ const ClassTimetableScreen = props => {
             setLoader(true);
 
             const params = {
-                //StudentID: studentInfo?.studentID,
-                StudentID: 15000,
+                StudentID: studentInfo?.studentID,
                 FromDate: moment(fromDate).format('DD/MMM/YYYY'),
                 ToDate: moment(toDate).format('DD/MMM/YYYY'),
                 AcademicInstanceID: studentInfo?.academicInstanceID,
