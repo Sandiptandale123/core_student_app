@@ -120,7 +120,7 @@ const Login = ({ navigation }) => {
 
                 {/* Form */}
                 <View style={{ padding: 5, marginTop: 15 }}>
-                  <PaperTextInput
+                  {/* <PaperTextInput
                     mode="outlined"
                     label="PRN No"
                     value={studentData?.prn_no}
@@ -139,7 +139,7 @@ const Login = ({ navigation }) => {
                     keyboardType="number-pad"
                     left={<PaperTextInput.Icon icon="card-account-details" color={colors.themeColor} />}
                     onChangeText={(value) => setStudentData({ ...studentData, prn_no: value })}
-                  />
+                  /> */}
 
                   <PaperTextInput
                     mode="outlined"
@@ -205,7 +205,7 @@ const Login = ({ navigation }) => {
                   <Pressable
                     style={({ pressed }) => [styles.loginButton, pressed && { opacity: 0.6 }]}
                     onPress={() => {
-                      if (!studentData.prn_no || !studentData.username || !studentData.password) {
+                      if (!studentData.username || !studentData.password) {
                         setErrorMsg('Please Enter Username and Password!');
                         setShowModal(true);
                       } else {

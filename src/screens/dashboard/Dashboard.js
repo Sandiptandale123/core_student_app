@@ -31,51 +31,73 @@ const Dashboard = ({ navigation }) => {
     };
     getUserData();
   }, []);
+  const [menuList1, setMenuList] = useState([]);
+
+  useEffect(() => {
+    if (studentInfo) {
+      const sysProgList = studentInfo?.sysModList?.[0]?.sysSubModList?.[0]?.sysProgList;
+      console.log("sysProgList:", sysProgList);
+      setMenuList(sysProgList || []);
+    }
+  }, [studentInfo]);
+
   const dashboardItems = [
     { id: '1', title: 'Profile', icon: require('../../assets/icon_profile.png'), color: '#4CAF50' },
     { id: '2', title: 'Payment List', icon: require('../../assets/exam_results.png'), color: '#2196F3' },
     { id: '3', title: 'Class Timetable', icon: require('../../assets/class_schedule_icon.png'), color: '#9C27B0' },
+    { id: '4', title: 'Monthly Attendance', icon: require('../../assets/approval.png'), color: '#ff99dd' },
   ];
-  const renderItem = ({ item }) => (
+  const dashboardColors = [
+    '#4CAF50',
+    '#2196F3',
+    '#9C27B0',
+    '#ff99dd'
+  ];
+
+  const renderItem = ({ item, index }) => (
     <Pressable style={({ pressed }) => [
       styles.itemContainer,
       pressed && { opacity: 0.6 }
     ]}
       onPress={() => {
-        if (item.id == 1) {
+        if (item.sysProgID === 9579) {
           navigation.navigate('ProfileScreen', { studentInfo: studentInfo });
-        } else if (item.id == 2) {
+          navigation.closeDrawer();
+        } else if (item.sysProgID === 9575) {
           navigation.navigate('PaymentListScreen', { studentInfo: studentInfo });
-        } else if (item.id == 3) {
+        } else if (item.sysProgID === 16076) {
           navigation.navigate('ClassTimetableScreen', { studentInfo: studentInfo });
+        } else if (item.sysProgID === 16077) {
+          navigation.navigate('MonthlyAttendanceScreen', { studentInfo: studentInfo });
         }
         else {
           navigation.navigate('Home')
         }
       }}>
-      <View style={[styles.iconCircle, { backgroundColor: item.color }]}>
+      <View style={[styles.iconCircle, { backgroundColor: dashboardColors[index % dashboardColors.length] }]}>
         {/* <Icon name={item.icon} size={30} color="#fff" /> */}
         <Image
           resizeMode="cover"
-          source={item.icon}
-          style={styles.image}
+          // source={item.icon}
+          source={require('../../assets/icon_profile.png')}
+          style={[styles.image, { tintColor: 'white' }]}
           pointerEvents="none"
         />
 
       </View>
-      <Text style={styles.label}>{item.title}</Text>
+      <Text style={styles.label}>{item.sysProgName}</Text>
     </Pressable>
   );
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={dashboardItems}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        data={menuList1}
+        keyExtractor={(item, index) => String(item.sysProgID ?? index)} // fallback भी रखा
         numColumns={2}
         columnWrapperStyle={{ justifyContent: 'space-around' }}
         contentContainerStyle={{ paddingVertical: 10 }}
+        renderItem={({ item, index }) => renderItem({ item, index })}
       />
     </View>
   );

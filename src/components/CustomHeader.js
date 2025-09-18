@@ -79,7 +79,7 @@ const CustomHeader = ({
       }
       style={styles.profileImage}
     /> */}
-            <Image
+            <Image resizeMode='stretch'
               source={
                 studentInfo?.photoPath && studentInfo?.photoPath !== ''
                   ? { uri: studentInfo?.photoPath }

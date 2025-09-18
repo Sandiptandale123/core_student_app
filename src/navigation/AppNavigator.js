@@ -16,6 +16,7 @@ import CustomHeader from '../components/CustomHeader';
 import PaymentListScreen from '../screens/payment/PaymentListScreen';
 import PaymentDetailsScreen from '../screens/paymentDetails/PaymentDetailsScreen';
 import ClassTimetableScreen from '../screens/classTimetable/ClassTimetableScreen';
+import MonthlyAttendanceScreen from '../screens/monthlyAttendance/MonthlyAttendanceScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -87,6 +88,20 @@ export default function AppNavigator() {
             <CustomHeader
               navigation={navigation}
               title="Class Timetable"
+              showNotification={false}
+              showBack={true}
+            />
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="MonthlyAttendanceScreen"
+        component={MonthlyAttendanceScreen}
+        options={({ navigation }) => ({
+          header: () => (
+            <CustomHeader
+              navigation={navigation}
+              title="Monthly Attendance"
               showNotification={false}
               showBack={true}
             />

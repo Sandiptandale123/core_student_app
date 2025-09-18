@@ -39,6 +39,17 @@ const SidebarScreen = (props) => {
 
     getUserData();
   }, []);
+  
+  const [menuList1, setMenuList] = useState([]);
+
+  useEffect(() => {
+    if (studentInfo) {
+      const sysProgList = studentInfo?.sysModList?.[0]?.sysSubModList?.[0]?.sysProgList;
+      console.log("sysProgList:", sysProgList);
+      setMenuList(sysProgList || []);
+    }
+  }, [studentInfo]);
+
   const menuList = [
     {
       name: 'Profile',
@@ -112,7 +123,7 @@ const SidebarScreen = (props) => {
 
         {/* Profile Section */}
         <View style={styles.profileSection}>
-          <Image
+          <Image resizeMode='stretch'
             source={
               studentInfo?.photoPath && studentInfo?.photoPath !== ''
                 ? { uri: studentInfo?.photoPath }
@@ -131,7 +142,7 @@ const SidebarScreen = (props) => {
 
         {/* Menu List */}
         <ScrollView style={styles.menuContainer}>
-          {menuList.map((item, index) => (
+          {/* {menuList.map((item, index) => (
             <View key={`main-${item.id}`}>
               <TouchableOpacity
                 style={styles.menuItem}
@@ -155,7 +166,51 @@ const SidebarScreen = (props) => {
                 </View>
               </TouchableOpacity>
             </View>
+          ))} */}
+          {menuList1.map((item, index) => (
+            <View key={`main-${item.sysProgID}`}>
+              <TouchableOpacity
+                style={styles.menuItem}
+                onPress={() => {
+                  if (item.sysProgID === 9579) {
+                    navigation.navigate('ProfileScreen', { studentInfo: studentInfo });
+                    navigation.closeDrawer();
+                  } else if (item.sysProgID === 9575) {
+                    navigation.navigate('PaymentListScreen', { studentInfo: studentInfo });
+                  } else if (item.sysProgID === 16076) {
+                    navigation.navigate('ClassTimetableScreen', { studentInfo: studentInfo });
+                  }else if (item.sysProgID === 16077) {
+                    navigation.navigate('MonthlyAttendanceScreen', { studentInfo: studentInfo });
+                  }
+                  // else if (item.sysProgName === 4) {
+                  //   setForgotModalVisible(true)
+                  // }
+                }}>
+                <View style={styles.menuLeft}>
+                  <View style={[styles.menuIconView,]}>
+                    {/* <Image source={item.icon} style={[styles.menuIcon]} /> */}
+                    <Image source={require('../assets/icon_profile.png')} style={[styles.menuIcon]} />
+                  </View>
+                  <Text style={styles.menuText}>{item.sysProgName}</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
           ))}
+          <View>
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={() => {
+                setForgotModalVisible(true)
+              }}>
+              <View style={styles.menuLeft}>
+                <View style={[styles.menuIconView,]}>
+                  {/* <Image source={item.icon} style={[styles.menuIcon]} /> */}
+                  <Image source={require('../assets/password_icon.png')} style={[styles.menuIcon]} />
+                </View>
+                <Text style={styles.menuText}>{'Password'}</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
 
         {/* Divider */}
