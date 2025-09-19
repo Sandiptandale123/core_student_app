@@ -36,22 +36,16 @@ const Dashboard = ({ navigation }) => {
   useEffect(() => {
     if (studentInfo) {
       const sysProgList = studentInfo?.sysModList?.[0]?.sysSubModList?.[0]?.sysProgList;
-      console.log("sysProgList:", sysProgList);
       setMenuList(sysProgList || []);
     }
   }, [studentInfo]);
 
-  const dashboardItems = [
-    { id: '1', title: 'Profile', icon: require('../../assets/icon_profile.png'), color: '#4CAF50' },
-    { id: '2', title: 'Payment List', icon: require('../../assets/exam_results.png'), color: '#2196F3' },
-    { id: '3', title: 'Class Timetable', icon: require('../../assets/class_schedule_icon.png'), color: '#9C27B0' },
-    { id: '4', title: 'Monthly Attendance', icon: require('../../assets/approval.png'), color: '#ff99dd' },
-  ];
   const dashboardColors = [
     '#4CAF50',
     '#2196F3',
     '#9C27B0',
-    '#ff99dd'
+    '#ff99dd',
+    '#ff4700'
   ];
 
   const renderItem = ({ item, index }) => (
@@ -69,6 +63,8 @@ const Dashboard = ({ navigation }) => {
           navigation.navigate('ClassTimetableScreen', { studentInfo: studentInfo });
         } else if (item.sysProgID === 16077) {
           navigation.navigate('MonthlyAttendanceScreen', { studentInfo: studentInfo });
+        } else if (item.sysProgID === 16079) {
+          navigation.navigate('ExamTimetableScreen', { studentInfo: studentInfo });
         }
         else {
           navigation.navigate('Home')

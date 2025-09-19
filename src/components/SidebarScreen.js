@@ -39,43 +39,23 @@ const SidebarScreen = (props) => {
 
     getUserData();
   }, []);
-  
+
   const [menuList1, setMenuList] = useState([]);
+  const dashboardColors = [
+    '#4CAF50',
+    '#2196F3',
+    '#9C27B0',
+    '#ff99dd',
+    '#ff4700'
+  ];
 
   useEffect(() => {
     if (studentInfo) {
       const sysProgList = studentInfo?.sysModList?.[0]?.sysSubModList?.[0]?.sysProgList;
-      console.log("sysProgList:", sysProgList);
       setMenuList(sysProgList || []);
     }
   }, [studentInfo]);
 
-  const menuList = [
-    {
-      name: 'Profile',
-      id: 1,
-      icon: require('../assets/icon_profile.png'),
-      color: '#007CCD'
-    },
-    {
-      name: 'Payment List',
-      id: 2,
-      icon: require('../assets/exam_results.png'),
-      color: '#3F8DE8',
-    },
-    {
-      name: 'Class Timetable',
-      id: 3,
-      icon: require('../assets/class_schedule_icon.png'),
-      color: '#9C27B0',
-    },
-    {
-      name: 'Password',
-      id: 4,
-      icon: require('../assets/password_icon.png'),
-      color: '#5EC878',
-    },
-  ];
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const handleLogout = async () => {
@@ -142,31 +122,6 @@ const SidebarScreen = (props) => {
 
         {/* Menu List */}
         <ScrollView style={styles.menuContainer}>
-          {/* {menuList.map((item, index) => (
-            <View key={`main-${item.id}`}>
-              <TouchableOpacity
-                style={styles.menuItem}
-                onPress={() => {
-                  if (item.id === 1) {
-                    navigation.navigate('ProfileScreen', { studentInfo: studentInfo });
-                    navigation.closeDrawer();
-                  } else if (item.id === 2) {
-                    navigation.navigate('PaymentListScreen', { studentInfo: studentInfo });
-                  } else if (item.id === 3) {
-                    navigation.navigate('ClassTimetableScreen', { studentInfo: studentInfo });
-                  } else if (item.id === 4) {
-                    setForgotModalVisible(true)
-                  }
-                }}>
-                <View style={styles.menuLeft}>
-                  <View style={[styles.menuIconView, { backgroundColor: item.color }]}>
-                    <Image source={item.icon} style={[styles.menuIcon]} />
-                  </View>
-                  <Text style={styles.menuText}>{item.name}</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          ))} */}
           {menuList1.map((item, index) => (
             <View key={`main-${item.sysProgID}`}>
               <TouchableOpacity
@@ -179,15 +134,17 @@ const SidebarScreen = (props) => {
                     navigation.navigate('PaymentListScreen', { studentInfo: studentInfo });
                   } else if (item.sysProgID === 16076) {
                     navigation.navigate('ClassTimetableScreen', { studentInfo: studentInfo });
-                  }else if (item.sysProgID === 16077) {
+                  } else if (item.sysProgID === 16077) {
                     navigation.navigate('MonthlyAttendanceScreen', { studentInfo: studentInfo });
+                  } else if (item.sysProgID === 16079) {
+                    navigation.navigate('ExamTimetableScreen', { studentInfo: studentInfo });
                   }
-                  // else if (item.sysProgName === 4) {
-                  //   setForgotModalVisible(true)
-                  // }
+                  else {
+                    navigation.navigate('Home')
+                  }
                 }}>
                 <View style={styles.menuLeft}>
-                  <View style={[styles.menuIconView,]}>
+                  <View style={[styles.menuIconView, { backgroundColor: dashboardColors[index % dashboardColors.length], borderRadius: 17.5 }]}>
                     {/* <Image source={item.icon} style={[styles.menuIcon]} /> */}
                     <Image source={require('../assets/icon_profile.png')} style={[styles.menuIcon]} />
                   </View>
@@ -203,9 +160,9 @@ const SidebarScreen = (props) => {
                 setForgotModalVisible(true)
               }}>
               <View style={styles.menuLeft}>
-                <View style={[styles.menuIconView,]}>
+                <View style={[styles.menuIconView, { backgroundColor: '#5EC878', borderRadius: 17.5 }]}>
                   {/* <Image source={item.icon} style={[styles.menuIcon]} /> */}
-                  <Image source={require('../assets/password_icon.png')} style={[styles.menuIcon]} />
+                  <Image source={require('../assets/password_icon.png')} style={[styles.menuIcon,]} />
                 </View>
                 <Text style={styles.menuText}>{'Password'}</Text>
               </View>
