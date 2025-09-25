@@ -53,7 +53,7 @@ const Login = ({ navigation }) => {
       const response = await getStudentLogin(params);
       //console.log('printresponse', JSON.stringify(response.data));
       if (response?.status === 200) {
-        const studentInfo = Array.isArray(response.data) ? response.data[0] : response.data;
+        const studentInfo = response?.data[0];
         if (!studentInfo) throw new Error('Invalid API response: studentInfo missing');
         await AsyncStorage.setItem('studentInfo', JSON.stringify(studentInfo));
         setLoader(false);
@@ -227,9 +227,9 @@ const Login = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-   backgroundColor: '#fff',
-  paddingHorizontal: 24,
-  paddingTop: Platform.OS === 'android' ? 40 : 0,
+    backgroundColor: '#fff',
+    paddingHorizontal: 24,
+    paddingTop: Platform.OS === 'android' ? 40 : 0,
   },
   title: {
     fontSize: 30,
