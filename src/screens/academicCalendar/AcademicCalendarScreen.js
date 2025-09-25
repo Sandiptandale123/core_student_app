@@ -47,6 +47,33 @@ const AcademicCalendarScreen = (props) => {
         }
     };
 
+    const generateMarkedDates = () => {
+        const marks = {};
+
+        // har event ka fromDate green background ke saath
+        academicCalendarList.forEach(item => {
+            const date = moment(item.fromDate).format('YYYY-MM-DD');
+            marks[date] = {
+                ...(marks[date] || {}),
+                selected: true,         // background ke liye selected use karenge
+                selectedColor: '#00b300', // green background
+                marked: false,
+                dotColor: 'green',      // optional dot
+            };
+        });
+
+        // highlight currently selected day in blue
+        if (selectedDay) {
+            marks[selectedDay] = {
+                ...(marks[selectedDay] || {}),
+                selected: true,
+                selectedColor: '#005f99', // blue for selected day
+            };
+        }
+
+        return marks;
+    };
+
     // Filter list based on selected date
     const filteredCalendarList = academicCalendarList.filter(item => {
         const start = moment(item.fromDate);
@@ -58,8 +85,9 @@ const AcademicCalendarScreen = (props) => {
     const RenderAcademicCalendar = ({ item }) => {
         return (
             <View style={styles.card}>
-                <Text style={styles.label}>Desc : <Text style={styles.value}>{item.calendarDescription}</Text></Text>
-                <Text style={styles.label}>Rem : <Text style={styles.value}>{item.calendarRemarks}</Text></Text>
+                <Text style={styles.label}>{item.calendarDescription}</Text>
+                <Text style={styles.value}>{item.calendarRemarks}</Text>
+                <Text style={styles.value}>{moment(item.fromDate).format('DD-MM-YYYY')} To {moment(item.toDate).format('DD-MM-YYYY')}</Text>
             </View>
         )
     };
@@ -91,26 +119,16 @@ const AcademicCalendarScreen = (props) => {
                                 backgroundColor: '#cceeff',
                                 calendarBackground: '#cceeff',
                                 textSectionTitleColor: '#000',
-                                selectedDayBackgroundColor: '#005f99',
-                                selectedDayTextColor: '#fff',
                                 todayTextColor: '#ff0000',
                                 arrowColor: '#005f99',
                                 monthTextColor: '#000',
                                 textDayFontWeight: '500',
                                 textMonthFontWeight: 'bold',
                             }}
-                            markedDates={selectedDates}
-                            onDayPress={(day) => {
-                                const newDates = {};
-                                newDates[day.dateString] = {
-                                    selected: true,
-                                    marked: false,
-                                    selectedColor: '#005f99',
-                                };
-                                setSelectedDates(newDates);
-                                setSelectedDay(day.dateString);
-                            }}
+                            markedDates={generateMarkedDates()}
+                            onDayPress={(day) => setSelectedDay(day.dateString)}
                         />
+
                     </View>
 
                     <FlatList
@@ -149,8 +167,8 @@ const styles = StyleSheet.create({
         shadowColor: '#000',
         shadowOpacity: 0.1,
         shadowRadius: 5,
-        elevation: 3, alignItems: 'flex-start',
-        marginBottom: 2,
+        elevation: 3,
+        alignItems: 'flex-start',
     },
     row: {
         justifyContent: 'center',
