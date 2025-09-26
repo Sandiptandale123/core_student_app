@@ -44,8 +44,13 @@ const Dashboard = ({ navigation }) => {
     '#4CAF50',
     '#2196F3',
     '#9C27B0',
-    '#ff99dd',
-    '#ff4700'
+    '#FF99DD',
+    '#FF9800',
+    '#F44336',
+    '#00BCD4',
+    '#8BC34A',
+    '#FFC107',
+    '#795548',
   ];
 
   const renderItem = ({ item, index }) => (
