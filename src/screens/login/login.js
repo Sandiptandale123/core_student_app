@@ -110,7 +110,7 @@ const Login = ({ navigation }) => {
               >
                 {/* Title */}
                 <Text style={styles.title}>Student Login</Text>
-
+                <Text style={[styles.title, { fontSize: 22, color: '#B31B1B' }]}>Government College of Engineering, Karad</Text>
                 {/* Illustration */}
                 <Image
                   source={require('../../assets/student_image.png')}
@@ -120,27 +120,6 @@ const Login = ({ navigation }) => {
 
                 {/* Form */}
                 <View style={{ padding: 5, marginTop: 15 }}>
-                  {/* <PaperTextInput
-                    mode="outlined"
-                    label="PRN No"
-                    value={studentData?.prn_no}
-                    outlineColor={colors.themeColor}
-                    activeOutlineColor={colors.themeColor}
-                    style={styles.commonPaperInput}
-                    theme={{
-                      ...styles.inputTheme,
-                      fonts: {
-                        ...styles.inputTheme?.fonts,
-                        bodyLarge: { fontSize: 18 },
-                      },
-                    }}
-                    placeholder="Enter PRN No"
-                    autoCapitalize="none"
-                    keyboardType="number-pad"
-                    left={<PaperTextInput.Icon icon="card-account-details" color={colors.themeColor} />}
-                    onChangeText={(value) => setStudentData({ ...studentData, prn_no: value })}
-                  /> */}
-
                   <PaperTextInput
                     mode="outlined"
                     label="Username"

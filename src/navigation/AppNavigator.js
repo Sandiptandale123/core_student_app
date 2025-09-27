@@ -20,6 +20,7 @@ import MonthlyAttendanceScreen from '../screens/monthlyAttendance/MonthlyAttenda
 import ExamTimetableScreen from '../screens/examTimetable/ExamTimetableScreen';
 import AcademicCalendarScreen from '../screens/academicCalendar/AcademicCalendarScreen';
 import HolidayListScreen from '../screens/holiday/HolidayListScreen';
+import NotificationsScreen from '../screens/notifications/NotificationsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -146,7 +147,21 @@ export default function AppNavigator() {
           header: () => (
             <CustomHeader
               navigation={navigation}
-              title="Upcoming Holidays"
+              title="Holiday List"
+              showNotification={false}
+              showBack={true}
+            />
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="NotificationsScreen"
+        component={NotificationsScreen}
+        options={({ navigation }) => ({
+          header: () => (
+            <CustomHeader
+              navigation={navigation}
+              title="Notifications"
               showNotification={false}
               showBack={true}
             />

@@ -143,10 +143,12 @@ const SidebarScreen = (props) => {
                     navigation.navigate('MonthlyAttendanceScreen', { studentInfo: studentInfo });
                   } else if (item.sysProgID === 16079) {
                     navigation.navigate('ExamTimetableScreen', { studentInfo: studentInfo });
-                  }else if (item.sysProgID === 16080) {
+                  } else if (item.sysProgID === 16080) {
                     navigation.navigate('AcademicCalendarScreen', { studentInfo: studentInfo });
-                  }else if (item.sysProgID === 16081) {
+                  } else if (item.sysProgID === 16081) {
                     navigation.navigate('HolidayListScreen', { studentInfo: studentInfo });
+                  } else if (item.sysProgID === 16085) {
+                    navigation.navigate('NotificationsScreen', { studentInfo: studentInfo });
                   }
                   else {
                     navigation.navigate('Home')
