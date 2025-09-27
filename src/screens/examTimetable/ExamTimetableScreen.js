@@ -11,7 +11,8 @@ const ExamTimetableScreen = props => {
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-    const [studentExamHallTicketTimeTableList, setStudentExamHallTicketTimeTableList] = useState(null);
+    const [studentExamHallTicketTimeTableList, setStudentExamHallTicketTimeTableList] = useState([]);
+
     const [showErorMsg, setErrorMsg] = useState('');
     const [showLoader, setLoader] = useState(false);
 
@@ -87,7 +88,7 @@ const ExamTimetableScreen = props => {
                 <View style={[styles.container, { flexDirection: 'column' }]}>
                     {showErorMsg !== '' && <Text style={styles.errorText}>{showErorMsg}</Text>}
 
-                    {studentExamHallTicketTimeTableList && (
+                    {studentExamHallTicketTimeTableList?.length > 0 && (
                         <View style={styles.card1}>
                             <View style={styles.cardRow}>
                                 <View style={{ flex: 1, paddingRight: 10 }}>
@@ -95,21 +96,22 @@ const ExamTimetableScreen = props => {
                                         Student Name : {studentInfo.firstName} {studentInfo.middleName} {studentInfo.lastName}
                                     </Text>
                                     <Text numberOfLines={2} style={[styles.subjectText, { fontFamily: 'Montserrat-Bold' }]}>
-                                        Seat Number : {studentExamHallTicketTimeTableList[0].studentSeatNO}
+                                        Seat Number : {studentExamHallTicketTimeTableList[0]?.studentSeatNO}
                                     </Text>
                                     <Text numberOfLines={2} style={[styles.subjectText, { fontFamily: 'Montserrat-Bold' }]}>
-                                        Program : {studentExamHallTicketTimeTableList[0].courseName}
+                                        Program : {studentExamHallTicketTimeTableList[0]?.courseName}
                                     </Text>
                                     <Text numberOfLines={2} style={[styles.subjectText, { fontFamily: 'Montserrat-Bold' }]}>
-                                        Sem / Part : {studentExamHallTicketTimeTableList[0].coursePartDescription}
+                                        Sem / Part : {studentExamHallTicketTimeTableList[0]?.coursePartDescription}
                                     </Text>
                                     <Text numberOfLines={2} style={[styles.subjectText, { fontFamily: 'Montserrat-Bold' }]}>
-                                        Exam Instance : {studentExamHallTicketTimeTableList[0].examInstanceRemark}
+                                        Exam Instance : {studentExamHallTicketTimeTableList[0]?.examInstanceRemark}
                                     </Text>
                                 </View>
                             </View>
                         </View>
                     )}
+
 
                     <View style={[styles.container, { paddingHorizontal: 0 }]}>
                         <FlatList
@@ -117,6 +119,13 @@ const ExamTimetableScreen = props => {
                             renderItem={renderFacultyItem}
                             keyExtractor={(item, index) => index.toString()}
                             contentContainerStyle={{ paddingBottom: 100 }}
+                            ListEmptyComponent={() => (
+                                <View style={{ flex: 1, marginTop: 20 }}>
+                                    <Text style={[styles.errorText, { fontSize: 18 }]}>
+                                        Student Exam Hall Ticket Timetable is Not Available
+                                    </Text>
+                                </View>
+                            )}
                         />
                     </View>
                 </View>
